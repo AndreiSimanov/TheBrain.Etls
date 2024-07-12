@@ -13,19 +13,19 @@ internal abstract class BaseCommand(IConfiguration config)
 
         if (string.Equals(GetType().Name.ToLower(), config[Consts.COMMAND]!.ToLower()))
         {
-            try
-            {
-                Console.WriteLine($"Run {GetType().Name}");
-                RunCommand();
-            }
-            finally
-            {
-            }
-            Task.Delay(1000);
+            Console.WriteLine($"Run {GetType().Name}");
+            RunCommand();
+            Console.WriteLine($"{GetType().Name} command completed.");
             return true;
         }
         return false;
     }
 
     protected abstract void RunCommand();
+
+    public static void WriteProgress(int current, int total)
+    {
+        Console.SetCursorPosition(0, Console.GetCursorPosition().Top);
+        Console.Write($"Progress: {current} of {total}");
+    }
 }

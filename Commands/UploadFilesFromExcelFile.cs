@@ -10,11 +10,7 @@ internal class UploadFilesFromExcelFile(IConfiguration config) : BaseBrainComman
     {
         var excelFilePath = config[Consts.EXCEL_FILE_PATH];
         if (!File.Exists(excelFilePath))
-        {
-            Console.WriteLine($"Excel file {excelFilePath} not found.");
-            return;
-        }
-
+            throw new Exception($"Excel file '{excelFilePath}' not found.");
         base.RunCommand();
         UploadFiles();
     }
@@ -33,10 +29,16 @@ internal class UploadFilesFromExcelFile(IConfiguration config) : BaseBrainComman
         using FileStream stream = fileInfo.OpenRead();
         package.Load(stream);
         var worksheet = package.Workbook.Worksheets[0];
-
+        var rowCount = worksheet.Rows.Count();
+        if (rowCount == 0)
+            throw new Exception($"Excel file '{excelFilePath}' is empty.");
 
         foreach (var row in worksheet.Rows)
+        {
             UploadFile(row.Range.Text);
+            WriteProgress(row.StartRow, rowCount);
+        }
+        Console.WriteLine(string.Empty);
     }
 
     void UploadFile(string text)//todo: UploadFileAsync

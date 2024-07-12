@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using OfficeOpenXml;
+using System.Runtime.Intrinsics.X86;
 using TheBrain.Etls.Commands.BaseCommands;
 
 namespace TheBrain.Etls.Commands;
@@ -10,19 +11,28 @@ internal class CreateExcelFile(IConfiguration config) : BaseBrainCommand(config)
     {
         base.RunCommand();
 
-        var maxId = markedFiles.Keys.Max();
-
-        foreach (var newFile in newFiles)
+        if (newFiles.Count > 0)
         {
-            AddFileId(newFile, ++maxId);
-            Console.WriteLine($"New file {maxId} = {newFile}");
+            Console.WriteLine("Adding 'Id' to new files...");
+            var maxId = markedFiles.Keys.Max();
+            for (int i = 0; i < newFiles.Count; i++)
+            {
+                AddFileId(newFiles[i], ++maxId);
+                markedFiles.Add(maxId, newFiles[i]);
+                WriteProgress(i + 1, newFiles.Count);
+            }
+            Console.WriteLine(string.Empty);
         }
-
         CreateResultFile();
     }
 
     void CreateResultFile()  //todo: CreateResultFileAsync
     {
+        if (markedFiles.Count == 0)
+            throw new Exception("'*.md' files not found.");
+
+        Console.WriteLine("Adding files to excel file...");
+
         var excelFilePath = config[Consts.EXCEL_FILE_PATH];
         if (File.Exists(excelFilePath))
             File.Delete(excelFilePath); 
@@ -36,7 +46,10 @@ internal class CreateExcelFile(IConfiguration config) : BaseBrainCommand(config)
         {
             var file = markedFiles[id];
             worksheet.Cells[$"A{++rowIndex}"].Value = File.ReadAllText(file);
+            WriteProgress(rowIndex, markedFiles.Count);
         }
+        Console.WriteLine(string.Empty);
+        Console.WriteLine($"Saving excel file to '{excelFilePath}'...");
         package.SaveAs(excelFilePath); //todo: SaveAsAsync
     }
 
