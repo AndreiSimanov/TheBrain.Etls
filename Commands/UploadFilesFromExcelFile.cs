@@ -15,7 +15,6 @@ internal class UploadFilesFromExcelFile(IConfiguration config) : BaseBrainComman
         UploadFiles();
     }
 
-
     void UploadFiles()  //todo: UploadFilesAsync
     {
         var excelFilePath = config[Consts.EXCEL_FILE_PATH];
@@ -33,31 +32,24 @@ internal class UploadFilesFromExcelFile(IConfiguration config) : BaseBrainComman
         if (rowCount == 0)
             throw new Exception($"Excel file '{excelFilePath}' is empty.");
 
-        foreach (var row in worksheet.Rows)
+        for (int rowIndex = 1; rowIndex <= rowCount; rowIndex++)
         {
-            UploadFile(row.Range.Text);
-            WriteProgress(row.StartRow, rowCount);
+            var id = worksheet.Cells[$"A{rowIndex}"].Value.ToString();
+
+            if (!string.IsNullOrWhiteSpace(id))
+            {
+                var contentPath = GetFilePath(id);
+                if (!string.IsNullOrWhiteSpace(contentPath))
+                {
+                    File.WriteAllText(contentPath, worksheet.Cells[$"C{rowIndex}"].Value.ToString()); //todo: WriteAllTextAsync
+                }
+                else
+                {
+                    //todo: log "file not found"
+                }
+            }
+            WriteProgress(rowIndex, rowCount);
         }
         Console.WriteLine(string.Empty);
-    }
-
-    void UploadFile(string text)//todo: UploadFileAsync
-    {
-        using var reader = new StringReader(text);
-        var firstLine = reader.ReadLine();
-        var id = GetId(firstLine);
-        if (!id.HasValue)
-        {
-            Console.WriteLine($"Row {0} doesn't contain Id");
-            return;
-        }
-
-        if (!markedFiles.ContainsKey(id.Value))
-        {
-            Console.WriteLine($"File with Id = {id.Value} doesn't exist");
-            return;
-        }
-
-        File.WriteAllText(markedFiles[id.Value], text); //todo: WriteAllTextAsync
     }
 }

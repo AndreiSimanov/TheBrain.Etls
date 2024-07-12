@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Serilog;
 
 namespace TheBrain.Etls.Commands.BaseCommands;
 
@@ -13,9 +14,11 @@ internal abstract class BaseCommand(IConfiguration config)
 
         if (string.Equals(GetType().Name.ToLower(), config[Consts.COMMAND]!.ToLower()))
         {
-            Console.WriteLine($"Run {GetType().Name}");
+            Log.Information($"Run {GetType().Name}");
+            //Console.WriteLine($"Run {GetType().Name}");
             RunCommand();
-            Console.WriteLine($"{GetType().Name} command completed.");
+            Log.Information($"{GetType().Name} command completed.");
+            //Console.WriteLine($"{GetType().Name} command completed.");
             return true;
         }
         return false;

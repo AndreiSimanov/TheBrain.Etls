@@ -1,63 +1,35 @@
 ﻿using Microsoft.Extensions.Configuration;
-using System.Text.RegularExpressions;
+using TheBrain.Etls.Models;
+using TheBrain.Etls.DBContext;
 
 namespace TheBrain.Etls.Commands.BaseCommands;
 
 internal abstract class BaseBrainCommand(IConfiguration config) : BaseCommand(config)
 {
-    readonly Regex regex = new Regex(@"ID:\d+");
-    protected Dictionary<int, string> markedFiles = new();
-    protected List<string> collisionFiles = new();
-    protected List<string> newFiles = new();
-
+    protected Dictionary<string, Thoughts> thoughts = new();
+    protected int filesCount = 0;
+    protected  string brainsFolderPath = string.Empty;
     protected override void RunCommand()
     {
-        var brainsFolderPath = config[Consts.BRAINS_FOLDER_PATH];
+        brainsFolderPath = config[Consts.BRAINS_FOLDER_PATH];
         var excelFilePath = config[Consts.EXCEL_FILE_PATH];
         CheckCommandParams(brainsFolderPath, excelFilePath);
 
-        Console.WriteLine($"Scan '*.md' files in '{brainsFolderPath}' folder.");
+        Console.WriteLine($"Load data from Brain.db in '{brainsFolderPath}' folder.");
+        thoughts = GetThoughts(brainsFolderPath!);
+        Console.WriteLine($"Scan files in '{brainsFolderPath}' folder.");
 
-        var files = Directory.EnumerateFiles(brainsFolderPath!, "*.md", SearchOption.AllDirectories);
-
-        foreach (string file in files)
+        foreach (var thing in thoughts)
         {
-            var text = File.ReadLines(file).Where(txt => !string.IsNullOrWhiteSpace(txt)).FirstOrDefault();
-
-            var id = GetId(text);
-            if (id.HasValue)
+            var contentPath = GetFilePath(thing.Key);
+            if (!string.IsNullOrWhiteSpace(contentPath))
             {
-                if (markedFiles.ContainsKey(id.Value))
-                    collisionFiles.Add(file);
-                else
-                    markedFiles.Add(id.Value, file);
-                continue;
+                thing.Value.ContentPath = contentPath;
+                filesCount++;
             }
-            newFiles.Add(file);
         }
 
-        Console.WriteLine($"New files count: {newFiles.Count}");
-        Console.WriteLine($"Files with 'Id' count: {markedFiles.Count}");
-
-        if (collisionFiles.Count > 0) 
-            Console.ForegroundColor = ConsoleColor.Red;
-        Console.WriteLine($"Collision files count: {collisionFiles.Count}");
-        Console.ResetColor();
-    }
-
-    public int? GetId(string? text)
-    {
-        if (string.IsNullOrWhiteSpace(text))
-            return null;
-        text = text.Trim().Replace(" ", string.Empty).ToUpper();
-
-        if (regex.IsMatch(text))
-        {
-            var idStr = text.Split(":")[1];
-            if (int.TryParse(idStr, out int id))
-                return id;
-        }
-        return null;
+        Console.WriteLine($"Files count: {filesCount}");
     }
 
     void CheckCommandParams(string? brainsFolderPath, string? excelFilePath)
@@ -67,7 +39,6 @@ internal abstract class BaseBrainCommand(IConfiguration config) : BaseCommand(co
 
         var outputPath = Path.GetDirectoryName(excelFilePath);
 
-
         if (string.IsNullOrWhiteSpace(outputPath) || !Directory.Exists(outputPath))
             throw new Exception($"Excel file path '{outputPath}' not found.");
 
@@ -75,5 +46,22 @@ internal abstract class BaseBrainCommand(IConfiguration config) : BaseCommand(co
         if (string.IsNullOrWhiteSpace(outputFileName))
             throw new Exception($"Excel file name is empty.");
 
+    }
+
+    protected string GetFilePath(string id)
+    {
+        var contentPath = Path.Combine(brainsFolderPath!, id, "Notes.md");
+        return File.Exists(contentPath)? contentPath: string.Empty;
+    }
+
+    Dictionary<string, Thoughts> GetThoughts(string path)
+    {
+        var dbFile = Path.Combine(path, "Brain.db");
+        if (!File.Exists(dbFile))
+            throw new Exception($"Database file '{dbFile}' not found.");
+
+        using var dbContext = new SqliteContext(dbFile);
+
+        return dbContext.Thoughts.ToDictionary(item => item.Id);
     }
 }

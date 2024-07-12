@@ -1,8 +1,21 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿// See https://aka.ms/new-console-template for more information
+
+
+
+using Microsoft.Extensions.Configuration;
+using Serilog.Events;
+using Serilog;
 using TheBrain.Etls.Commands;
 using TheBrain.Etls.Commands.BaseCommands;
 
 AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+
+Log.Logger = new LoggerConfiguration()
+            .MinimumLevel.Debug()
+            .WriteTo.File("log.txt")
+            .WriteTo.Console(restrictedToMinimumLevel: LogEventLevel.Information)
+            .CreateLogger();
+
 
 IConfiguration config = new ConfigurationBuilder().AddCommandLine(args).Build();
 
@@ -29,7 +42,4 @@ catch (Exception ex)
 Console.ReadKey();
 
 
-void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
-{
-    Console.WriteLine(e.ExceptionObject.ToString());
-}
+void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e) => Log.Error(e.ExceptionObject.ToString()!);
