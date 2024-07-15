@@ -30,7 +30,7 @@ internal class CreateExcelFile(IConfiguration config) : BaseBrainCommand(config)
 
         var excelFilePath = config[Consts.EXCEL_FILE_PATH];
         if (File.Exists(excelFilePath))
-            File.Delete(excelFilePath); 
+            File.Delete(excelFilePath);
 
         ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 

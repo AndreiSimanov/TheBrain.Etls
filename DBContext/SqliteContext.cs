@@ -9,7 +9,7 @@ internal class SqliteContext : DbContext
 
     private static int crmContextId;
     public int Id { get; set; }
-    string dbPath =string.Empty;
+    string dbPath = string.Empty;
 
     public SqliteContext(string dbPath)
     {

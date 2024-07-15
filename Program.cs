@@ -1,10 +1,10 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using Microsoft.Extensions.Configuration;
+using System.Globalization;
+using TheBrain.Etls;
 using TheBrain.Etls.Commands;
 using TheBrain.Etls.Commands.BaseCommands;
-using TheBrain.Etls;
-using System.Globalization;
 using TheBrain.Etls.Resources.Languages;
 
 AppDomain.CurrentDomain.UnhandledException += UnhandledException;

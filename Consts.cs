@@ -1,6 +1,4 @@
-﻿using System.Drawing;
-
-namespace TheBrain.Etls;
+﻿namespace TheBrain.Etls;
 
 internal static class Consts
 {
@@ -18,7 +16,7 @@ internal static class Consts
     // commands
     public const string CREATE_EXCEL_COMMAND_PARAM = "createExcelFile";
     public const string UPLOAD_FILES_COMMAND_PARAM = "uploadFilesFromExcelFile";
-        
+
     // default values
     public const string DEFAULT_DB_FILE_NAME = "Brain.db";
     public const string DEFAULT_LOG_FILE_NAME = "TheBrain.Etls.log";

@@ -43,7 +43,7 @@ internal class UploadFilesFromExcelFile(IConfiguration config) : BaseBrainComman
             if (ValidateId(rowIndex, id))
             {
                 var contentPath = GetFilePath(id!);
-                 File.WriteAllText(contentPath, worksheet.Cells[$"{Consts.CONTENT_COL}{rowIndex}"].Value.ToString()); //todo: WriteAllTextAsync
+                File.WriteAllText(contentPath, worksheet.Cells[$"{Consts.CONTENT_COL}{rowIndex}"].Value.ToString()); //todo: WriteAllTextAsync
             }
             EtlLog.Processed(rowIndex, rowCount);
         }

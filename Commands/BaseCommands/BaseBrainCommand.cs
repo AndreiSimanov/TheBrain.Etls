@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
-using TheBrain.Etls.Models;
 using TheBrain.Etls.DBContext;
+using TheBrain.Etls.Models;
 using TheBrain.Etls.Resources.Languages;
 
 namespace TheBrain.Etls.Commands.BaseCommands;
@@ -68,7 +68,7 @@ internal abstract class BaseBrainCommand(IConfiguration config) : BaseCommand(co
             var excelFileName = Path.GetFileName(excelFilePath);
             if (string.IsNullOrWhiteSpace(excelFileName))
                 errors.Add(AppResources.ExcelFileNameEmpty);
-        }    
+        }
     }
 
     protected string GetFilePath(string id) => Path.Combine(brainsFolderPath, id, contentFileName);
