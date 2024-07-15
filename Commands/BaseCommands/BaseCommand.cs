@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Serilog;
+using TheBrain.Etls.Resources.Languages;
 
 namespace TheBrain.Etls.Commands.BaseCommands;
 
@@ -15,23 +15,25 @@ internal abstract class BaseCommand(IConfiguration config)
 
         if (string.Equals(GetType().Name.ToLower(), config[Consts.COMMAND]!.ToLower()))
         {
-            EtlLog.Information($"Run {GetType().Name}");
+            EtlLog.Information(string.Format(AppResources.RunCommand, GetCommandName()));
 
             ValidateParams();
             if (errors.Count > 0)
             {
-                errors.ForEach(error => EtlLog.Information(error));
+                errors.ForEach(error => EtlLog.Error(error));
+                EtlLog.Information(AppResources.СommandCompletedError);
                 return false;
             }
 
             RunCommand();
             if (errors.Count > 0)
             {
-                errors.ForEach(error => EtlLog.Information(error));
+                errors.ForEach(error => EtlLog.Error(error));
+                EtlLog.Information(AppResources.СommandCompletedError);
                 return false;
             }
 
-            EtlLog.Information($"{GetType().Name} command completed.");
+            EtlLog.Information(AppResources.СommandCompleted);
             return true;
         }
         return false;
@@ -40,4 +42,5 @@ internal abstract class BaseCommand(IConfiguration config)
     protected abstract void RunCommand();
     protected abstract void ValidateParams();
     public abstract void GetUsage();
+    public abstract string GetCommandName();
 }

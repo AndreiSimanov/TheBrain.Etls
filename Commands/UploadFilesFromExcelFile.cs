@@ -1,12 +1,17 @@
 ﻿using Microsoft.Extensions.Configuration;
 using OfficeOpenXml;
-using Serilog;
 using TheBrain.Etls.Commands.BaseCommands;
+using TheBrain.Etls.Resources.Languages;
 
 namespace TheBrain.Etls.Commands;
 
 internal class UploadFilesFromExcelFile(IConfiguration config) : BaseBrainCommand(config)
 {
+    public override string GetCommandName()
+    {
+        return AppResources.UploadFilesFromExcelFile;
+    }
+
     protected override void RunCommand()
     {
         base.RunCommand();
@@ -27,49 +32,49 @@ internal class UploadFilesFromExcelFile(IConfiguration config) : BaseBrainComman
         var rowCount = worksheet.Rows.Count();
         if (rowCount == 0)
         {
-            errors.Add($"Excel file '{excelFilePath}' is empty.");
+            errors.Add(string.Format(AppResources.ExcelFileEmpty, excelFilePath));
             return;
         }
 
         for (int rowIndex = 1; rowIndex <= rowCount; rowIndex++)
         {
-            var id = worksheet.Cells[$"A{rowIndex}"].Value.ToString();
+            var id = worksheet.Cells[$"{Consts.ID_COL}{rowIndex}"].Value?.ToString();
 
             if (ValidateId(rowIndex, id))
             {
                 var contentPath = GetFilePath(id!);
-                if (File.Exists(contentPath))
-                    File.WriteAllText(contentPath, worksheet.Cells[$"C{rowIndex}"].Value.ToString()); //todo: WriteAllTextAsync
+                 File.WriteAllText(contentPath, worksheet.Cells[$"{Consts.CONTENT_COL}{rowIndex}"].Value.ToString()); //todo: WriteAllTextAsync
             }
-            EtlLog.Progress(rowIndex, rowCount);
+            EtlLog.Processed(rowIndex, rowCount);
         }
     }
 
     protected override void ValidateParams()
     {
         base.ValidateParams();
-        if (!File.Exists(config[Consts.EXCEL_FILE_PATH]))
-            errors.Add($"Excel file '{config[Consts.EXCEL_FILE_PATH]}' not found.");
+        var excelFilePath = config[Consts.EXCEL_FILE_PATH];
+        if (!string.IsNullOrWhiteSpace(excelFilePath) && !File.Exists(excelFilePath))
+            errors.Add(string.Format(AppResources.ExcelFileNotFound, excelFilePath));
     }
 
     bool ValidateId(int rowIndex, string? id)
     {
         if (string.IsNullOrWhiteSpace(id))
         {
-            EtlLog.Warning($"Row {rowIndex} doesn't contain Id");
+            EtlLog.Warning(string.Format(AppResources.RowWithoutId, rowIndex));
             return false;
         }
 
         if (!thoughts.ContainsKey(id))
         {
-            EtlLog.Warning($"Row {rowIndex}: thought '{id}' doesn't exist in db.");
+            EtlLog.Warning(string.Format(AppResources.RowWrongId, rowIndex, id));
             return false;
         }
 
         var contentPath = GetFilePath(id!);
         if (string.IsNullOrWhiteSpace(contentPath))
         {
-            EtlLog.Warning($"Row {rowIndex}: file '{contentPath}' doesn't exist.");
+            EtlLog.Warning(string.Format(AppResources.RowFileNotFound, rowIndex, contentPath));
             return false;
         }
         return true;

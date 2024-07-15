@@ -4,13 +4,20 @@ using Microsoft.Extensions.Configuration;
 using TheBrain.Etls.Commands;
 using TheBrain.Etls.Commands.BaseCommands;
 using TheBrain.Etls;
+using System.Globalization;
+using TheBrain.Etls.Resources.Languages;
 
-AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+AppDomain.CurrentDomain.UnhandledException += UnhandledException;
 
 IConfiguration config = new ConfigurationBuilder().AddCommandLine(args).Build();
 InitConfig(config);
 
+Thread.CurrentThread.CurrentUICulture = new CultureInfo(config[Consts.LANG]!);
+Thread.CurrentThread.CurrentCulture = new CultureInfo(config[Consts.LANG]!);
+
 EtlLog.Init(config[Consts.LOG_FILE_PATH]!);
+
+var logFileInfo = new FileInfo(config[Consts.LOG_FILE_PATH]!);
 
 var commands = new List<BaseCommand> {
     new CreateExcelFile(config),
@@ -29,7 +36,11 @@ catch (Exception ex)
 {
     EtlLog.Error(ex.Message);
     if (!string.IsNullOrWhiteSpace(ex.StackTrace))
-      EtlLog.Error(ex.StackTrace);
+        EtlLog.Error(ex.StackTrace);
+}
+finally
+{
+    EtlLog.ConsoleWriteLine(string.Format(AppResources.SeeLogFilePath, logFileInfo.FullName));
 }
 
 Console.ReadKey();
@@ -44,6 +55,9 @@ void InitConfig(IConfiguration config)
 
     if (string.IsNullOrWhiteSpace(config[Consts.LOG_FILE_PATH]))
         config[Consts.LOG_FILE_PATH] = Consts.DEFAULT_LOG_FILE_NAME;
+
+    if (string.IsNullOrWhiteSpace(config[Consts.LANG]))
+        config[Consts.LANG] = Consts.DEFAULT_LANG;
 }
 
-void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e) => EtlLog.Error(e.ExceptionObject.ToString()!);
+void UnhandledException(object sender, UnhandledExceptionEventArgs e) => EtlLog.Error(e.ExceptionObject.ToString()!);

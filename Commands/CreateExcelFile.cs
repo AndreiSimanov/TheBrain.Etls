@@ -1,11 +1,17 @@
 ﻿using Microsoft.Extensions.Configuration;
 using OfficeOpenXml;
 using TheBrain.Etls.Commands.BaseCommands;
+using TheBrain.Etls.Resources.Languages;
 
 namespace TheBrain.Etls.Commands;
 
 internal class CreateExcelFile(IConfiguration config) : BaseBrainCommand(config)
 {
+    public override string GetCommandName()
+    {
+        return AppResources.CreateExcelFile;
+    }
+
     protected override void RunCommand()
     {
         base.RunCommand();
@@ -16,11 +22,11 @@ internal class CreateExcelFile(IConfiguration config) : BaseBrainCommand(config)
     {
         if (filesCount == 0)
         {
-            errors.Add($"Content '{config[Consts.CONTENT_FILE_NAME]}' files not found.");
+            errors.Add(string.Format(AppResources.FilesNotFound, config[Consts.CONTENT_FILE_NAME]));
             return;
         }
 
-        EtlLog.Information("Adding content to excel file...");
+        EtlLog.Information(AppResources.AddContentToExcel);
 
         var excelFilePath = config[Consts.EXCEL_FILE_PATH];
         if (File.Exists(excelFilePath))
@@ -29,20 +35,20 @@ internal class CreateExcelFile(IConfiguration config) : BaseBrainCommand(config)
         ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
         using var package = new ExcelPackage();
-        var worksheet = package.Workbook.Worksheets.Add("TheBrain");
+        var worksheet = package.Workbook.Worksheets.Add(Consts.SHEET_NAME);
         var rowIndex = 0;
         foreach (var thought in thoughts)
         {
             if (string.IsNullOrWhiteSpace(thought.Value.ContentPath))
                 continue;
             ++rowIndex;
-            worksheet.Cells[$"A{rowIndex}"].Value = thought.Value.Id;
-            worksheet.Cells[$"B{rowIndex}"].Value = thought.Value.Name;
-            worksheet.Cells[$"C{rowIndex}"].Value = File.ReadAllText(thought.Value.ContentPath);
-            EtlLog.Progress(rowIndex, filesCount);
+            worksheet.Cells[$"{Consts.ID_COL}{rowIndex}"].Value = thought.Value.Id;
+            worksheet.Cells[$"{Consts.NAME_COL}{rowIndex}"].Value = thought.Value.Name;
+            worksheet.Cells[$"{Consts.CONTENT_COL}{rowIndex}"].Value = File.ReadAllText(thought.Value.ContentPath);
+            EtlLog.Processed(rowIndex, filesCount);
         }
 
-        EtlLog.Information($"Saving excel file to '{excelFilePath}'...");
+        EtlLog.Information(string.Format(AppResources.SavingExcelFile, excelFilePath));
         package.SaveAs(excelFilePath); //todo: SaveAsAsync
     }
 }

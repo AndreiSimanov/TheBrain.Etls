@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using TheBrain.Etls.Models;
 using TheBrain.Etls.DBContext;
+using TheBrain.Etls.Resources.Languages;
 
 namespace TheBrain.Etls.Commands.BaseCommands;
 
@@ -17,9 +18,11 @@ internal abstract class BaseBrainCommand(IConfiguration config) : BaseCommand(co
         contentFileName = config[Consts.CONTENT_FILE_NAME]!;
         var dbFile = Path.Combine(brainsFolderPath!, config[Consts.DB_FILE_NAME]!);
 
-        EtlLog.Information($"Load data from '{Path.Combine(brainsFolderPath!, config[Consts.DB_FILE_NAME]!)}'");
+        EtlLog.Information(string.Format(AppResources.LoadDataFromDb, Path.Combine(brainsFolderPath!, config[Consts.DB_FILE_NAME]!)));
+
         thoughts = GetThoughts(dbFile);
-        EtlLog.Information($"Scan '{config[Consts.CONTENT_FILE_NAME]}' files in '{brainsFolderPath}' folder.");
+
+        EtlLog.Information(string.Format(AppResources.FindFiles, config[Consts.CONTENT_FILE_NAME], brainsFolderPath));
 
         foreach (var thought in thoughts)
         {
@@ -31,7 +34,7 @@ internal abstract class BaseBrainCommand(IConfiguration config) : BaseCommand(co
             }
         }
 
-        EtlLog.Information($"Files count: {filesCount}");
+        EtlLog.Information(string.Format(AppResources.FilesCount, filesCount));
     }
 
     public override void GetUsage() { }
@@ -41,21 +44,31 @@ internal abstract class BaseBrainCommand(IConfiguration config) : BaseCommand(co
         var brainsFolderPath = config[Consts.BRAINS_FOLDER_PATH];
         var excelFilePath = config[Consts.EXCEL_FILE_PATH];
 
-        if (string.IsNullOrWhiteSpace(brainsFolderPath) || !Directory.Exists(brainsFolderPath))
-            errors.Add($"Path '{brainsFolderPath}' not found.");
+        if (string.IsNullOrWhiteSpace(brainsFolderPath))
+            errors.Add(string.Format(AppResources.ParameterNotSpecified, Consts.BRAINS_FOLDER_PATH));
+        else
+        {
+            if (!Directory.Exists(brainsFolderPath))
+                errors.Add(string.Format(AppResources.PathNotFound, brainsFolderPath));
 
-        var dbFile = Path.Combine(brainsFolderPath!, config[Consts.DB_FILE_NAME]!);
-        if (!File.Exists(dbFile))
-            errors.Add($"Database file '{dbFile}' not found.");
+            var dbFile = Path.Combine(brainsFolderPath, config[Consts.DB_FILE_NAME]!);
+            if (!File.Exists(dbFile))
+                errors.Add(string.Format(AppResources.DbFileNotFound, dbFile));
+        }
 
-        var outputPath = Path.GetDirectoryName(excelFilePath);
+        if (string.IsNullOrWhiteSpace(excelFilePath))
+            errors.Add(string.Format(AppResources.ParameterNotSpecified, Consts.EXCEL_FILE_PATH));
+        else
+        {
+            var outputPath = Path.GetDirectoryName(excelFilePath);
 
-        if (string.IsNullOrWhiteSpace(outputPath) || !Directory.Exists(outputPath))
-            errors.Add($"Excel file path '{outputPath}' not found.");
+            if (string.IsNullOrWhiteSpace(outputPath) || !Directory.Exists(outputPath))
+                errors.Add(string.Format(AppResources.ExcelFilePathNotFound, outputPath));
 
-        var outputFileName = Path.GetFileName(excelFilePath);
-        if (string.IsNullOrWhiteSpace(outputFileName))
-            errors.Add($"Excel file name is empty.");
+            var excelFileName = Path.GetFileName(excelFilePath);
+            if (string.IsNullOrWhiteSpace(excelFileName))
+                errors.Add(AppResources.ExcelFileNameEmpty);
+        }    
     }
 
     protected string GetFilePath(string id) => Path.Combine(brainsFolderPath, id, contentFileName);

@@ -1,11 +1,12 @@
 ﻿using Serilog;
 using System.Text;
+using TheBrain.Etls.Resources.Languages;
 
 namespace TheBrain.Etls;
 
 public static class EtlLog
 {
-    static bool isProgress = false;
+    static bool isProcessed = false;
 
     public static void Init(string logPath)
     {
@@ -16,13 +17,11 @@ public static class EtlLog
                     .CreateLogger();
     }
 
+
     public static void Information(string message, bool isWriteToConsole = true)
     {
         if (isWriteToConsole)
-        {
-            ResetIsProgress();
-            Console.WriteLine(message);
-        }
+            ConsoleWriteLine(message);
         Log.Information(message);
     }
 
@@ -40,29 +39,32 @@ public static class EtlLog
         Log.Error(message);
     }
 
-    public static void Progress(int current, int total)
+    public static void Processed(int current, int total)
     {
         //Lock for multythreding Interlocked.
-        isProgress = true;
+        isProcessed = true;
         Console.SetCursorPosition(0, Console.GetCursorPosition().Top);
-        Console.Write($"Progress: {current} of {total}");
+        Console.Write(string.Format(AppResources.Processed, current, total));
     }
 
     public static void ResetIsProgress()
     {
-        if (isProgress)  //Lock for multythreding Interlocked.
+        if (isProcessed)  //Lock for multythreding Interlocked.
         {
-            isProgress = false;
+            isProcessed = false;
             Console.WriteLine(string.Empty);
         }
     }
 
-    static void ConsoleWriteLine(string message, ConsoleColor color)
+    public static void ConsoleWriteLine(string message, ConsoleColor? color = null)
     {
-        ResetIsProgress();
         var saveColor = Console.ForegroundColor;
-        Console.ForegroundColor = color;
+        if (color != null)
+            Console.ForegroundColor = color.Value;
+
+        ResetIsProgress();
         Console.WriteLine(message);
-        Console.ForegroundColor = saveColor;
+        if (color != null)
+            Console.ForegroundColor = saveColor;
     }
 }

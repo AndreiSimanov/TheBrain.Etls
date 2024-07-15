@@ -1,4 +1,6 @@
-﻿namespace TheBrain.Etls;
+﻿using System.Drawing;
+
+namespace TheBrain.Etls;
 
 internal static class Consts
 {
@@ -11,6 +13,7 @@ internal static class Consts
     public const string DB_FILE_NAME = "dbFileName";
     public const string CONTENT_FILE_NAME = "contentFileName";
     public const string LOG_FILE_PATH = "logFilePath";
+    public const string LANG = "lang";
 
     // commands
     public const string CREATE_EXCEL_COMMAND_PARAM = "createExcelFile";
@@ -20,4 +23,11 @@ internal static class Consts
     public const string DEFAULT_DB_FILE_NAME = "Brain.db";
     public const string DEFAULT_LOG_FILE_NAME = "TheBrain.Etls.log";
     public const string DEFAULT_CONTENT_FILE_NAME = "Notes.md";
+    public const string DEFAULT_LANG = "ru";
+
+    // other
+    public const string SHEET_NAME = "TheBrain";
+    public const string ID_COL = "A";
+    public const string NAME_COL = "B";
+    public const string CONTENT_COL = "C";
 }
