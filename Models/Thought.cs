@@ -1,13 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace TheBrain.Etls.Models
+﻿namespace TheBrain.Etls.Models
 {
-    public class Thoughts
+    public class Thought
     {
         public string Id { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
-
-        [NotMapped]
         public string ContentPath { get; set; } = string.Empty;
     }
 }
@@ -33,5 +29,4 @@ CREATE TABLE "Thoughts"(
 "SyncUpdateDateTime" bigint ,
 "ThoughtIconInfo" varchar(140) ,
 "TypeId" varchar(36) )
- 
- */
+  */

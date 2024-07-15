@@ -5,7 +5,7 @@ namespace TheBrain.Etls.DBContext;
 
 internal class SqliteContext : DbContext
 {
-    public DbSet<Thoughts> Thoughts { get; set; }
+    public DbSet<Thought> Thoughts { get; set; }
 
     private static int crmContextId;
     public int Id { get; set; }
@@ -23,6 +23,13 @@ internal class SqliteContext : DbContext
     {
         optionsBuilder.UseLazyLoadingProxies().UseSqlite($"Filename={dbPath}");
         base.OnConfiguring(optionsBuilder);
+    }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+        modelBuilder.Entity<Thought>().ToTable("Thoughts");
+        modelBuilder.Entity<Thought>().Ignore(t => t.ContentPath);
     }
 }
 

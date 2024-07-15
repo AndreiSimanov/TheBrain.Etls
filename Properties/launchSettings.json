@@ -2,7 +2,7 @@
   "profiles": {
     "TheBrain.Etls": {
       "commandName": "Project",
-      "commandLineArgs": "Command=uploadFilesFromExcelFile ExcelFilePath=C:\\temp\\test.xlsx BrainsFolderPath=C:\\Users\\user\\Brains\\U01\\B04"
+      "commandLineArgs": "Command=UploadFilesFromExcelFile ExcelFilePath=C:\\temp\\test.xlsx BrainsFolderPath=C:\\Users\\user\\Brains\\U01\\B04"
     }
   }
 }

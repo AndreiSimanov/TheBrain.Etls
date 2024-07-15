@@ -15,7 +15,10 @@ internal class CreateExcelFile(IConfiguration config) : BaseBrainCommand(config)
     void CreateResultFile()  //todo: CreateResultFileAsync
     {
         if (filesCount == 0)
-            throw new Exception("Files not found.");
+        {
+            errors.Add($"Content '{config[Consts.CONTENT_FILE_NAME]}' files not found.");
+            return;
+        }
 
         Console.WriteLine("Adding files to excel file...");
 
@@ -28,14 +31,14 @@ internal class CreateExcelFile(IConfiguration config) : BaseBrainCommand(config)
         using var package = new ExcelPackage();
         var worksheet = package.Workbook.Worksheets.Add("TheBrain");
         var rowIndex = 0;
-        foreach (var thing in thoughts)
+        foreach (var thought in thoughts)
         {
-            if (string.IsNullOrWhiteSpace(thing.Value.ContentPath))
+            if (string.IsNullOrWhiteSpace(thought.Value.ContentPath))
                 continue;
             ++rowIndex;
-            worksheet.Cells[$"A{rowIndex}"].Value = thing.Value.Id;
-            worksheet.Cells[$"B{rowIndex}"].Value = thing.Value.Name;
-            worksheet.Cells[$"C{rowIndex}"].Value = File.ReadAllText(thing.Value.ContentPath);
+            worksheet.Cells[$"A{rowIndex}"].Value = thought.Value.Id;
+            worksheet.Cells[$"B{rowIndex}"].Value = thought.Value.Name;
+            worksheet.Cells[$"C{rowIndex}"].Value = File.ReadAllText(thought.Value.ContentPath);
             WriteProgress(rowIndex, filesCount);
         }
         Console.WriteLine(string.Empty);
