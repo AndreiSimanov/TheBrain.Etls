@@ -17,9 +17,9 @@ internal abstract class BaseBrainCommand(IConfiguration config) : BaseCommand(co
         contentFileName = config[Consts.CONTENT_FILE_NAME]!;
         var dbFile = Path.Combine(brainsFolderPath!, config[Consts.DB_FILE_NAME]!);
 
-        Console.WriteLine($"Load data from '{Path.Combine(brainsFolderPath!, config[Consts.DB_FILE_NAME]!)}'");
+        EtlLog.Information($"Load data from '{Path.Combine(brainsFolderPath!, config[Consts.DB_FILE_NAME]!)}'");
         thoughts = GetThoughts(dbFile);
-        Console.WriteLine($"Scan '{config[Consts.CONTENT_FILE_NAME]}' files in '{brainsFolderPath}' folder.");
+        EtlLog.Information($"Scan '{config[Consts.CONTENT_FILE_NAME]}' files in '{brainsFolderPath}' folder.");
 
         foreach (var thought in thoughts)
         {
@@ -31,10 +31,10 @@ internal abstract class BaseBrainCommand(IConfiguration config) : BaseCommand(co
             }
         }
 
-        Console.WriteLine($"Files count: {filesCount}");
+        EtlLog.Information($"Files count: {filesCount}");
     }
 
-    public override void GetHelp() { }
+    public override void GetUsage() { }
 
     protected override void ValidateParams()
     {

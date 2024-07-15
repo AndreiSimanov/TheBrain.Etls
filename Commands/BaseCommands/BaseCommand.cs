@@ -15,24 +15,23 @@ internal abstract class BaseCommand(IConfiguration config)
 
         if (string.Equals(GetType().Name.ToLower(), config[Consts.COMMAND]!.ToLower()))
         {
-            Log.Information($"Run {GetType().Name}");
-            Console.WriteLine($"Run {GetType().Name}");
+            EtlLog.Information($"Run {GetType().Name}");
+
             ValidateParams();
             if (errors.Count > 0)
             {
-                errors.ForEach(Console.WriteLine);
+                errors.ForEach(error => EtlLog.Information(error));
                 return false;
             }
 
             RunCommand();
             if (errors.Count > 0)
             {
-                errors.ForEach(Console.WriteLine);
+                errors.ForEach(error => EtlLog.Information(error));
                 return false;
             }
 
-            Log.Information($"{GetType().Name} command completed.");
-            Console.WriteLine($"{GetType().Name} command completed.");
+            EtlLog.Information($"{GetType().Name} command completed.");
             return true;
         }
         return false;
@@ -40,11 +39,5 @@ internal abstract class BaseCommand(IConfiguration config)
 
     protected abstract void RunCommand();
     protected abstract void ValidateParams();
-    public abstract void GetHelp();
-
-    public static void WriteProgress(int current, int total)
-    {
-        Console.SetCursorPosition(0, Console.GetCursorPosition().Top);
-        Console.Write($"Progress: {current} of {total}");
-    }
+    public abstract void GetUsage();
 }

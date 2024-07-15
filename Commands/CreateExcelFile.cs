@@ -20,7 +20,7 @@ internal class CreateExcelFile(IConfiguration config) : BaseBrainCommand(config)
             return;
         }
 
-        Console.WriteLine("Adding files to excel file...");
+        EtlLog.Information("Adding content to excel file...");
 
         var excelFilePath = config[Consts.EXCEL_FILE_PATH];
         if (File.Exists(excelFilePath))
@@ -39,10 +39,10 @@ internal class CreateExcelFile(IConfiguration config) : BaseBrainCommand(config)
             worksheet.Cells[$"A{rowIndex}"].Value = thought.Value.Id;
             worksheet.Cells[$"B{rowIndex}"].Value = thought.Value.Name;
             worksheet.Cells[$"C{rowIndex}"].Value = File.ReadAllText(thought.Value.ContentPath);
-            WriteProgress(rowIndex, filesCount);
+            EtlLog.Progress(rowIndex, filesCount);
         }
-        Console.WriteLine(string.Empty);
-        Console.WriteLine($"Saving excel file to '{excelFilePath}'...");
+
+        EtlLog.Information($"Saving excel file to '{excelFilePath}'...");
         package.SaveAs(excelFilePath); //todo: SaveAsAsync
     }
 }

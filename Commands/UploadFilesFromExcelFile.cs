@@ -41,9 +41,8 @@ internal class UploadFilesFromExcelFile(IConfiguration config) : BaseBrainComman
                 if (File.Exists(contentPath))
                     File.WriteAllText(contentPath, worksheet.Cells[$"C{rowIndex}"].Value.ToString()); //todo: WriteAllTextAsync
             }
-            WriteProgress(rowIndex, rowCount);
+            EtlLog.Progress(rowIndex, rowCount);
         }
-        Console.WriteLine(string.Empty);
     }
 
     protected override void ValidateParams()
@@ -57,20 +56,20 @@ internal class UploadFilesFromExcelFile(IConfiguration config) : BaseBrainComman
     {
         if (string.IsNullOrWhiteSpace(id))
         {
-            Log.Warning($"Row {rowIndex} doesn't contain Id");
+            EtlLog.Warning($"Row {rowIndex} doesn't contain Id");
             return false;
         }
 
         if (!thoughts.ContainsKey(id))
         {
-            Log.Warning($"Row {rowIndex}: thought '{id}' doesn't exist in db.");
+            EtlLog.Warning($"Row {rowIndex}: thought '{id}' doesn't exist in db.");
             return false;
         }
 
         var contentPath = GetFilePath(id!);
         if (string.IsNullOrWhiteSpace(contentPath))
         {
-            Log.Warning($"Row {rowIndex}: file '{contentPath}' doesn't exist.");
+            EtlLog.Warning($"Row {rowIndex}: file '{contentPath}' doesn't exist.");
             return false;
         }
         return true;

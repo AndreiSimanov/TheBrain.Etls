@@ -12,11 +12,7 @@ AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 IConfiguration config = new ConfigurationBuilder().AddCommandLine(args).Build();
 InitConfig(config);
 
-Log.Logger = new LoggerConfiguration()
-            .MinimumLevel.Debug()
-            .WriteTo.File(config[Consts.LOG_FILE_PATH]!)
-            .WriteTo.Console(restrictedToMinimumLevel: LogEventLevel.Error)
-            .CreateLogger();
+EtlLog.Init(config[Consts.LOG_FILE_PATH]!);
 
 var commands = new List<BaseCommand> {
     new CreateExcelFile(config),
@@ -29,16 +25,16 @@ try
         return;
 
     //var opt = new Options();
-    //Console.WriteLine(opt.GetUsage());
+    //EtlLog.Information(opt.GetUsage());
 }
 catch (Exception ex)
 {
-    Console.WriteLine(ex.Message);
-    Console.WriteLine(ex.StackTrace);
+    EtlLog.Error(ex.Message);
+    if (!string.IsNullOrWhiteSpace(ex.StackTrace))
+      EtlLog.Error(ex.StackTrace);
 }
 
 Console.ReadKey();
-
 
 void InitConfig(IConfiguration config)
 {
@@ -52,4 +48,4 @@ void InitConfig(IConfiguration config)
         config[Consts.LOG_FILE_PATH] = Consts.DEFAULT_LOG_FILE_NAME;
 }
 
-void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e) => Log.Error(e.ExceptionObject.ToString()!);
+void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e) => EtlLog.Error(e.ExceptionObject.ToString()!);
