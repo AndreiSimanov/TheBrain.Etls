@@ -1,5 +1,5 @@
 ﻿using Serilog;
-using Serilog.Events;
+using System.Text;
 
 namespace TheBrain.Etls;
 
@@ -9,6 +9,7 @@ public static class EtlLog
 
     public static void Init(string logPath)
     {
+        Console.OutputEncoding = Encoding.UTF8;
         Log.Logger = new LoggerConfiguration()
                     .MinimumLevel.Debug()
                     .WriteTo.File(logPath)

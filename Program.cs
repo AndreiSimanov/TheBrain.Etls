@@ -1,8 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using Microsoft.Extensions.Configuration;
-using Serilog.Events;
-using Serilog;
 using TheBrain.Etls.Commands;
 using TheBrain.Etls.Commands.BaseCommands;
 using TheBrain.Etls;
