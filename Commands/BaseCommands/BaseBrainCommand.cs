@@ -98,7 +98,7 @@ internal abstract class BaseBrainCommand(IConfiguration config) : BaseCommand(co
             var excelFileName = Path.GetFileName(excelFilePath);
             if (string.IsNullOrWhiteSpace(excelFileName))
                 errors.Add(AppResources.ExcelFileNameEmpty);
-            else if (IsFileLocked(excelFilePath))
+            else if (File.Exists(excelFilePath) && IsFileLocked(excelFilePath))
                 errors.Add(string.Format(AppResources.FileLocked, excelFilePath));
         }
     }
