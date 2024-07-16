@@ -8,7 +8,7 @@ internal abstract class BaseCommand(IConfiguration config)
     protected readonly IConfiguration config = config;
     protected readonly List<string> errors = new List<string>();
 
-    public bool Run()
+    public async Task<bool> RunAsync()
     {
         if (config[Consts.COMMAND] == null)
             return false;
@@ -22,15 +22,16 @@ internal abstract class BaseCommand(IConfiguration config)
             {
                 errors.ForEach(error => EtlLog.Error(error));
                 EtlLog.Information(AppResources.СommandCompletedError);
-                return false;
+                return true;
             }
 
-            RunCommand();
+            await RunCommandAsync();
+
             if (errors.Count > 0)
             {
                 errors.ForEach(error => EtlLog.Error(error));
                 EtlLog.Information(AppResources.СommandCompletedError);
-                return false;
+                return true;
             }
 
             EtlLog.Information(AppResources.СommandCompleted);
@@ -39,7 +40,7 @@ internal abstract class BaseCommand(IConfiguration config)
         return false;
     }
 
-    protected abstract void RunCommand();
+    protected abstract Task RunCommandAsync();
     protected abstract void ValidateParams();
     public abstract void GetUsage();
     public abstract string GetCommandName();

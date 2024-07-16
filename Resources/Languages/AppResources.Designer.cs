@@ -214,6 +214,15 @@ namespace TheBrain.Etls.Resources.Languages {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to File &apos;{0}&apos; in use by another process.
+        /// </summary>
+        internal static string FileLocked {
+            get {
+                return ResourceManager.GetString("FileLocked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Files count: {0}.
         /// </summary>
         internal static string FilesCount {

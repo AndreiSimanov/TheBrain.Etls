@@ -12,25 +12,21 @@ internal class CreateExcelFile(IConfiguration config) : BaseBrainCommand(config)
         return AppResources.CreateExcelFile;
     }
 
-    protected override void RunCommand()
+    protected async override Task RunCommandAsync()
     {
-        base.RunCommand();
-        CreateResultFile();
+        await base.RunCommandAsync();
+        await CreateResultFileAsync();
     }
 
-    void CreateResultFile()  //todo: CreateResultFileAsync
+    async Task CreateResultFileAsync()
     {
-        if (filesCount == 0)
+        if (thoughts.Count == 0)
         {
             errors.Add(string.Format(AppResources.FilesNotFound, config[Consts.CONTENT_FILE_NAME]));
             return;
         }
 
         EtlLog.Information(AppResources.AddContentToExcel);
-
-        var excelFilePath = config[Consts.EXCEL_FILE_PATH];
-        if (File.Exists(excelFilePath))
-            File.Delete(excelFilePath);
 
         ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
@@ -44,11 +40,15 @@ internal class CreateExcelFile(IConfiguration config) : BaseBrainCommand(config)
             ++rowIndex;
             worksheet.Cells[$"{Consts.ID_COL}{rowIndex}"].Value = thought.Value.Id;
             worksheet.Cells[$"{Consts.NAME_COL}{rowIndex}"].Value = thought.Value.Name;
-            worksheet.Cells[$"{Consts.CONTENT_COL}{rowIndex}"].Value = File.ReadAllText(thought.Value.ContentPath);
-            EtlLog.Processed(rowIndex, filesCount);
+            worksheet.Cells[$"{Consts.CONTENT_COL}{rowIndex}"].Value = await File.ReadAllTextAsync(thought.Value.ContentPath);
+            EtlLog.Processed(rowIndex, thoughts.Count);
         }
 
+        var excelFilePath = config[Consts.EXCEL_FILE_PATH];
+
         EtlLog.Information(string.Format(AppResources.SavingExcelFile, excelFilePath));
-        package.SaveAs(excelFilePath); //todo: SaveAsAsync
+        if (File.Exists(excelFilePath))
+            File.Delete(excelFilePath);
+        await package.SaveAsAsync(excelFilePath);
     }
 }

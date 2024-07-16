@@ -168,6 +168,9 @@
   <data name="ExcelParamUsage" xml:space="preserve">
     <value>{0}{1}=&lt;Excel file path&gt;</value>
   </data>
+  <data name="FileLocked" xml:space="preserve">
+    <value>File '{0}' in use by another process</value>
+  </data>
   <data name="FilesCount" xml:space="preserve">
     <value>Files count: {0}</value>
   </data>

@@ -9,7 +9,6 @@ namespace TheBrain.Etls.Commands.BaseCommands;
 internal abstract class BaseBrainCommand(IConfiguration config) : BaseCommand(config)
 {
     protected Dictionary<string, Thought> thoughts = new();
-    protected int filesCount = 0;
     protected string brainsFolderPath = string.Empty;
     protected string contentFileName = string.Empty;
 
@@ -46,28 +45,28 @@ internal abstract class BaseBrainCommand(IConfiguration config) : BaseCommand(co
         EtlLog.ConsoleWriteLine(sb.ToString());
     }
 
-    protected override void RunCommand()
+    protected async override Task RunCommandAsync()
     {
         brainsFolderPath = config[Consts.BRAINS_FOLDER_PATH]!;
         contentFileName = config[Consts.CONTENT_FILE_NAME]!;
         var dbFile = Path.Combine(brainsFolderPath!, config[Consts.DB_FILE_NAME]!);
 
         EtlLog.Information(string.Format(AppResources.LoadDataFromDb, Path.Combine(brainsFolderPath!, config[Consts.DB_FILE_NAME]!)));
-
-        thoughts = GetThoughts(dbFile);
-
         EtlLog.Information(string.Format(AppResources.FindFiles, config[Consts.CONTENT_FILE_NAME], brainsFolderPath));
 
-        foreach (var thought in thoughts)
+        using var dbContext = new SqliteContext(dbFile);
+
+        await foreach (var thought in dbContext.Thoughts.AsAsyncEnumerable())
         {
-            var contentPath = GetFilePath(thought.Key);
+            var contentPath = GetFilePath(thought.Id);
             if (File.Exists(contentPath))
             {
-                thought.Value.ContentPath = contentPath;
-                filesCount++;
+                thought.ContentPath = contentPath;
+                thoughts.Add(thought.Id, thought);
             }
         }
-        EtlLog.Information(string.Format(AppResources.FilesCount, filesCount));
+       
+        EtlLog.Information(string.Format(AppResources.FilesCount, thoughts.Count));
     }
 
     protected override void ValidateParams()
@@ -99,14 +98,25 @@ internal abstract class BaseBrainCommand(IConfiguration config) : BaseCommand(co
             var excelFileName = Path.GetFileName(excelFilePath);
             if (string.IsNullOrWhiteSpace(excelFileName))
                 errors.Add(AppResources.ExcelFileNameEmpty);
+            else if (IsFileLocked(excelFilePath))
+                errors.Add(string.Format(AppResources.FileLocked, excelFilePath));
         }
     }
 
     protected string GetFilePath(string id) => Path.Combine(brainsFolderPath, id, contentFileName);
 
-    Dictionary<string, Thought> GetThoughts(string dbFile)
+    bool IsFileLocked(string filePath)
     {
-        using var dbContext = new SqliteContext(dbFile);
-        return dbContext.Thoughts.ToDictionary(item => item.Id);
+        try
+        {
+            var file = new FileInfo(filePath);
+            using FileStream stream = file.Open(FileMode.Open, FileAccess.Read, FileShare.None);
+            stream.Close();
+        }
+        catch (IOException)
+        {
+            return true;
+        }
+        return false;
     }
 }

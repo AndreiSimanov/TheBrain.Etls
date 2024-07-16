@@ -162,6 +162,9 @@
   <data name="ExcelParamUsage" xml:space="preserve">
     <value>{0}{1}=&lt;Путь к файлу excel&gt;</value>
   </data>
+  <data name="FileLocked" xml:space="preserve">
+    <value>Файл '{0}' заблокирован другим процессом</value>
+  </data>
   <data name="FilesCount" xml:space="preserve">
     <value>Количество файлов: {0}</value>
   </data>

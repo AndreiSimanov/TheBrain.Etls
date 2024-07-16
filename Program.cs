@@ -19,15 +19,17 @@ var logFileInfo = new FileInfo(config[Consts.LOG_FILE_PATH]!);
 
 var commands = new List<BaseCommand> {
     new CreateExcelFile(config),
-    new UploadFilesFromExcelFile(config),
-};
+    new UploadFilesFromExcelFile(config)};
 
 try
 {
-    if (commands.Any(command => command.Run()))
+    foreach (var command in commands)
     {
-        EtlLog.ConsoleWriteLine(string.Format(AppResources.SeeLogFilePath, logFileInfo.FullName));
-        return;
+        if (await command.RunAsync())
+        {
+            EtlLog.ConsoleWriteLine(string.Format(AppResources.SeeLogFilePath, logFileInfo.FullName));
+            return;
+        }
     }
 
     commands.ForEach(command => command.GetUsage());

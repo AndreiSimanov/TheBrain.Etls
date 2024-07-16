@@ -12,13 +12,13 @@ internal class UploadFilesFromExcelFile(IConfiguration config) : BaseBrainComman
         return AppResources.UploadFilesFromExcelFile;
     }
 
-    protected override void RunCommand()
+    protected async override Task RunCommandAsync()
     {
-        base.RunCommand();
-        UploadFiles();
+        await base.RunCommandAsync();
+        await UploadFilesAsync();
     }
 
-    void UploadFiles()  //todo: UploadFilesAsync
+    async Task UploadFilesAsync()
     {
         var excelFilePath = config[Consts.EXCEL_FILE_PATH];
 
@@ -27,7 +27,7 @@ internal class UploadFilesFromExcelFile(IConfiguration config) : BaseBrainComman
 
         using var package = new ExcelPackage();
         using FileStream stream = fileInfo.OpenRead();
-        package.Load(stream);
+        await package.LoadAsync(stream);
         var worksheet = package.Workbook.Worksheets[0];
         var rowCount = worksheet.Rows.Count();
         if (rowCount == 0)
@@ -43,7 +43,7 @@ internal class UploadFilesFromExcelFile(IConfiguration config) : BaseBrainComman
             if (ValidateId(rowIndex, id))
             {
                 var contentPath = GetFilePath(id!);
-                File.WriteAllText(contentPath, worksheet.Cells[$"{Consts.CONTENT_COL}{rowIndex}"].Value.ToString()); //todo: WriteAllTextAsync
+                await File.WriteAllTextAsync(contentPath, worksheet.Cells[$"{Consts.CONTENT_COL}{rowIndex}"].Value.ToString());
             }
             EtlLog.Processed(rowIndex, rowCount);
         }
