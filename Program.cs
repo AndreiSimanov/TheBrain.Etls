@@ -1,6 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
-
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using System.Globalization;
 using TheBrain.Etls;
 using TheBrain.Etls.Commands;
@@ -27,19 +25,18 @@ var commands = new List<BaseCommand> {
 try
 {
     if (commands.Any(command => command.Run()))
+    {
+        EtlLog.ConsoleWriteLine(string.Format(AppResources.SeeLogFilePath, logFileInfo.FullName));
         return;
+    }
 
-    //var opt = new Options();
-    //EtlLog.Information(opt.GetUsage());
+    commands.ForEach(command => command.GetUsage());
 }
 catch (Exception ex)
 {
     EtlLog.Error(ex.Message);
     if (!string.IsNullOrWhiteSpace(ex.StackTrace))
         EtlLog.Error(ex.StackTrace);
-}
-finally
-{
     EtlLog.ConsoleWriteLine(string.Format(AppResources.SeeLogFilePath, logFileInfo.FullName));
 }
 

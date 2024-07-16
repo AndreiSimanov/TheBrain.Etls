@@ -120,8 +120,29 @@
   <data name="AddContentToExcel" xml:space="preserve">
     <value>Запись контента в excel файл...</value>
   </data>
+  <data name="CommandExamples" xml:space="preserve">
+    <value>Примеры вызова:</value>
+  </data>
+  <data name="CommandOptionalParams" xml:space="preserve">
+    <value>Необязательные параметры:</value>
+  </data>
+  <data name="CommandParamUsage" xml:space="preserve">
+    <value>{0}{1}={2} (Запуск указанной команды)</value>
+  </data>
+  <data name="CommandUsage" xml:space="preserve">
+    <value>Параметры вызова команды:</value>
+  </data>
+  <data name="ContentFileParamUsage" xml:space="preserve">
+    <value>{0}{1}=&lt;Имя файла контента приложения TheBrain&gt; (По умолчанию  = {2})</value>
+  </data>
   <data name="CreateExcelFile" xml:space="preserve">
     <value>Создать еxcel файл на основе данных приложения 'TheBrain'</value>
+  </data>
+  <data name="DatabaseFileParamUsage" xml:space="preserve">
+    <value>{0}{1}=&lt;Имя файла базы данных приложения TheBrain&gt; (По умолчанию = {2})</value>
+  </data>
+  <data name="DatabaseParamUsage" xml:space="preserve">
+    <value>{0}{1}=&lt;Путь к базе данных приложения TheBrain&gt;</value>
   </data>
   <data name="DbFileNotFound" xml:space="preserve">
     <value>Файл базы данных '{0}' не найден</value>
@@ -136,7 +157,10 @@
     <value>Excel файл '{0}' не найден</value>
   </data>
   <data name="ExcelFilePathNotFound" xml:space="preserve">
-    <value>Путь до еxcel файла '{0}' не найден</value>
+    <value>Путь к еxcel файлу '{0}' не найден</value>
+  </data>
+  <data name="ExcelParamUsage" xml:space="preserve">
+    <value>{0}{1}=&lt;Путь к файлу excel&gt;</value>
   </data>
   <data name="FilesCount" xml:space="preserve">
     <value>Количество файлов: {0}</value>
@@ -147,8 +171,14 @@
   <data name="FindFiles" xml:space="preserve">
     <value>Поиск '{0}' файлов в папке '{1}'</value>
   </data>
+  <data name="LangParamUsage" xml:space="preserve">
+    <value>{0}{1}=&lt;Установить язык приложения ru/en&gt; (Default = {2})</value>
+  </data>
   <data name="LoadDataFromDb" xml:space="preserve">
     <value>Загрузка данных из '{0}'</value>
+  </data>
+  <data name="LogFileParamUsage" xml:space="preserve">
+    <value>{0}{1}=&lt;Путь к файлу логирования&gt; (Default = {2})</value>
   </data>
   <data name="ParameterNotSpecified" xml:space="preserve">
     <value>Параметр '{0}' не указан</value>

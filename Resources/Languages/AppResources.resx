@@ -120,8 +120,35 @@
   <data name="AddContentToExcel" xml:space="preserve">
     <value>Adding content to excel file...</value>
   </data>
+  <data name="CommandExamples" xml:space="preserve">
+    <value>Examples:</value>
+  </data>
+  <data name="CommandOptionalParams" xml:space="preserve">
+    <value>Optional params:</value>
+  </data>
+  <data name="CommandParamUsage" xml:space="preserve">
+    <value>{0}{1}={2} (Run the specified command)</value>
+  </data>
+  <data name="CommandSample1" xml:space="preserve">
+    <value>{0}.exe {1}={2} {3}=C:\temp\test.xlsx {4}=C:\Users\user\Brains\U01\B04</value>
+  </data>
+  <data name="CommandSample2" xml:space="preserve">
+    <value>{0}.exe {1}={2} {3}=C:\temp\test.xlsx {4}=C:\Users\user\Brains\U01\B04 {5}=en</value>
+  </data>
+  <data name="CommandUsage" xml:space="preserve">
+    <value>Usage:</value>
+  </data>
+  <data name="ContentFileParamUsage" xml:space="preserve">
+    <value>{0}{1}=&lt;TheBrain content file name&gt; (Default = {2})</value>
+  </data>
   <data name="CreateExcelFile" xml:space="preserve">
     <value>Create еxcel file from 'TheBrain' application data</value>
+  </data>
+  <data name="DatabaseFileParamUsage" xml:space="preserve">
+    <value>{0}{1}=&lt;TheBrain database file name&gt; (Default = {2})</value>
+  </data>
+  <data name="DatabaseParamUsage" xml:space="preserve">
+    <value>{0}{1}=&lt;TheBrain database folder path</value>
   </data>
   <data name="DbFileNotFound" xml:space="preserve">
     <value>Database file '{0}' not found</value>
@@ -138,6 +165,9 @@
   <data name="ExcelFilePathNotFound" xml:space="preserve">
     <value>Excel file path '{0}' not found</value>
   </data>
+  <data name="ExcelParamUsage" xml:space="preserve">
+    <value>{0}{1}=&lt;Excel file path&gt;</value>
+  </data>
   <data name="FilesCount" xml:space="preserve">
     <value>Files count: {0}</value>
   </data>
@@ -147,8 +177,14 @@
   <data name="FindFiles" xml:space="preserve">
     <value>Find '{0}' files in '{1}' folder</value>
   </data>
+  <data name="LangParamUsage" xml:space="preserve">
+    <value>{0}{1}=&lt;Set application lang ru/en&gt; (Default = {2})</value>
+  </data>
   <data name="LoadDataFromDb" xml:space="preserve">
     <value>Load data from '{0}'</value>
+  </data>
+  <data name="LogFileParamUsage" xml:space="preserve">
+    <value>{0}{1}=&lt;Log file path&gt; (Default = {2})</value>
   </data>
   <data name="ParameterNotSpecified" xml:space="preserve">
     <value>Parameter '{0}' not specified</value>

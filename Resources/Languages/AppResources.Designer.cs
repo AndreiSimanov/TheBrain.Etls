@@ -70,11 +70,92 @@ namespace TheBrain.Etls.Resources.Languages {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Examples:.
+        /// </summary>
+        internal static string CommandExamples {
+            get {
+                return ResourceManager.GetString("CommandExamples", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Optional params:.
+        /// </summary>
+        internal static string CommandOptionalParams {
+            get {
+                return ResourceManager.GetString("CommandOptionalParams", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}{1}={2} (Run the specified command).
+        /// </summary>
+        internal static string CommandParamUsage {
+            get {
+                return ResourceManager.GetString("CommandParamUsage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}.exe {1}={2} {3}=C:\temp\test.xlsx {4}=C:\Users\user\Brains\U01\B04.
+        /// </summary>
+        internal static string CommandSample1 {
+            get {
+                return ResourceManager.GetString("CommandSample1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}.exe {1}={2} {3}=C:\temp\test.xlsx {4}=C:\Users\user\Brains\U01\B04 {5}=en.
+        /// </summary>
+        internal static string CommandSample2 {
+            get {
+                return ResourceManager.GetString("CommandSample2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Usage:.
+        /// </summary>
+        internal static string CommandUsage {
+            get {
+                return ResourceManager.GetString("CommandUsage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}{1}=&lt;TheBrain content file name&gt; (Default = {2}).
+        /// </summary>
+        internal static string ContentFileParamUsage {
+            get {
+                return ResourceManager.GetString("ContentFileParamUsage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create еxcel file from &apos;TheBrain&apos; application data.
         /// </summary>
         internal static string CreateExcelFile {
             get {
                 return ResourceManager.GetString("CreateExcelFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}{1}=&lt;TheBrain database file name&gt; (Default = {2}).
+        /// </summary>
+        internal static string DatabaseFileParamUsage {
+            get {
+                return ResourceManager.GetString("DatabaseFileParamUsage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}{1}=&lt;TheBrain database folder path.
+        /// </summary>
+        internal static string DatabaseParamUsage {
+            get {
+                return ResourceManager.GetString("DatabaseParamUsage", resourceCulture);
             }
         }
         
@@ -124,6 +205,15 @@ namespace TheBrain.Etls.Resources.Languages {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0}{1}=&lt;Excel file path&gt;.
+        /// </summary>
+        internal static string ExcelParamUsage {
+            get {
+                return ResourceManager.GetString("ExcelParamUsage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Files count: {0}.
         /// </summary>
         internal static string FilesCount {
@@ -151,11 +241,29 @@ namespace TheBrain.Etls.Resources.Languages {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0}{1}=&lt;Set application lang ru/en&gt; (Default = {2}).
+        /// </summary>
+        internal static string LangParamUsage {
+            get {
+                return ResourceManager.GetString("LangParamUsage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Load data from &apos;{0}&apos;.
         /// </summary>
         internal static string LoadDataFromDb {
             get {
                 return ResourceManager.GetString("LoadDataFromDb", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}{1}=&lt;Log file path&gt; (Default = {2}).
+        /// </summary>
+        internal static string LogFileParamUsage {
+            get {
+                return ResourceManager.GetString("LogFileParamUsage", resourceCulture);
             }
         }
         

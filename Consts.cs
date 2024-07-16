@@ -28,4 +28,5 @@ internal static class Consts
     public const string ID_COL = "A";
     public const string NAME_COL = "B";
     public const string CONTENT_COL = "C";
+    public const string PARAM_USAGE_INDENT = "    ";
 }
