@@ -41,7 +41,7 @@ public static class EtlLog
 
     public static void Processed(int current, int total)
     {
-        //Lock for multythreding Interlocked.
+        //todo:Lock for multythreding (Interlocked?)
         isProcessed = true;
         Console.SetCursorPosition(0, Console.GetCursorPosition().Top);
         Console.Write(string.Format(AppResources.Processed, current, total));
@@ -49,7 +49,7 @@ public static class EtlLog
 
     public static void ResetIsProgress()
     {
-        if (isProcessed)  //Lock for multythreding Interlocked.
+        if (isProcessed)  //todo:Lock for multythreding (Interlocked?)
         {
             isProcessed = false;
             Console.WriteLine(string.Empty);
