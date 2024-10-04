@@ -210,6 +210,9 @@
   <data name="SeeLogFilePath" xml:space="preserve">
     <value>См. лог файл: '{0}'</value>
   </data>
+  <data name="ThoughtsCount" xml:space="preserve">
+    <value>Количество узлов (thoughts) : {0}</value>
+  </data>
   <data name="UploadFilesFromExcelFile" xml:space="preserve">
     <value>Загрузить контент из еxcel файла в приложение 'TheBrain'</value>
   </data>

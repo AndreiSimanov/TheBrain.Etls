@@ -216,6 +216,9 @@
   <data name="SeeLogFilePath" xml:space="preserve">
     <value>See log file: '{0}'</value>
   </data>
+  <data name="ThoughtsCount" xml:space="preserve">
+    <value>Thoughts count: {0}</value>
+  </data>
   <data name="UploadFilesFromExcelFile" xml:space="preserve">
     <value>Upload content  from еxcel file to 'TheBrain' application </value>
   </data>

@@ -18,6 +18,14 @@ internal class UploadFilesFromExcelFile(IConfiguration config) : BaseBrainComman
         await UploadFilesAsync();
     }
 
+    protected override void ValidateParams()
+    {
+        base.ValidateParams();
+        var excelFilePath = config[Consts.EXCEL_FILE_PATH];
+        if (!string.IsNullOrWhiteSpace(excelFilePath) && !File.Exists(excelFilePath))
+            errors.Add(string.Format(AppResources.ExcelFileNotFound, excelFilePath));
+    }
+
     async Task UploadFilesAsync()
     {
         var excelFilePath = config[Consts.EXCEL_FILE_PATH];
@@ -39,25 +47,33 @@ internal class UploadFilesFromExcelFile(IConfiguration config) : BaseBrainComman
         for (int rowIndex = 1; rowIndex <= rowCount; rowIndex++)
         {
             var id = worksheet.Cells[$"{Consts.ID_COL}{rowIndex}"].Value?.ToString();
-
-            if (ValidateId(rowIndex, id))
+            var contentPath = GetFilePath(id!);
+            var content = worksheet.Cells[$"{Consts.CONTENT_COL}{rowIndex}"].Value?.ToString();
+            if (ValidateRow(rowIndex, id, contentPath, content))
             {
-                var contentPath = GetFilePath(id!);
-                await File.WriteAllTextAsync(contentPath, worksheet.Cells[$"{Consts.CONTENT_COL}{rowIndex}"].Value.ToString());
+                await UpdateContent(contentPath, content);
             }
             EtlLog.Processed(rowIndex, rowCount);
         }
     }
 
-    protected override void ValidateParams()
+    async Task UpdateContent(string contentPath, string? content)
     {
-        base.ValidateParams();
-        var excelFilePath = config[Consts.EXCEL_FILE_PATH];
-        if (!string.IsNullOrWhiteSpace(excelFilePath) && !File.Exists(excelFilePath))
-            errors.Add(string.Format(AppResources.ExcelFileNotFound, excelFilePath));
+        if (File.Exists(contentPath))
+        {
+            var attrs = File.GetAttributes(contentPath);
+            var roFlag = attrs.HasFlag(FileAttributes.ReadOnly);
+            if (roFlag)
+                File.SetAttributes(contentPath, attrs & ~FileAttributes.ReadOnly);
+
+            await File.WriteAllTextAsync(contentPath, content);
+
+            if (roFlag)
+                File.SetAttributes(contentPath, attrs & FileAttributes.ReadOnly);
+        }
     }
 
-    bool ValidateId(int rowIndex, string? id)
+    bool ValidateRow(int rowIndex, string? id, string contentPath, string? content)
     {
         if (string.IsNullOrWhiteSpace(id))
         {
@@ -71,8 +87,7 @@ internal class UploadFilesFromExcelFile(IConfiguration config) : BaseBrainComman
             return false;
         }
 
-        var contentPath = GetFilePath(id!);
-        if (string.IsNullOrWhiteSpace(contentPath))
+        if (!File.Exists(contentPath) && !string.IsNullOrWhiteSpace(content))
         {
             EtlLog.Warning(string.Format(AppResources.RowFileNotFound, rowIndex, contentPath));
             return false;

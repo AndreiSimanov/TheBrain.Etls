@@ -56,17 +56,22 @@ internal abstract class BaseBrainCommand(IConfiguration config) : BaseCommand(co
 
         using var dbContext = new SqliteContext(dbFile);
 
+        EtlLog.Information(string.Format(AppResources.ThoughtsCount, dbContext.Thoughts.Count()));
+
+        var filesCount = 0;
+
         await foreach (var thought in dbContext.Thoughts.AsAsyncEnumerable())
         {
             var contentPath = GetFilePath(thought.Id);
             if (File.Exists(contentPath))
             {
                 thought.ContentPath = contentPath;
-                thoughts.Add(thought.Id, thought);
+                filesCount++;
             }
+            thoughts.Add(thought.Id, thought);
         }
-       
-        EtlLog.Information(string.Format(AppResources.FilesCount, thoughts.Count));
+
+        EtlLog.Information(string.Format(AppResources.FilesCount, filesCount));
     }
 
     protected override void ValidateParams()

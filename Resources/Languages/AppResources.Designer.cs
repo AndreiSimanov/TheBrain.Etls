@@ -358,6 +358,15 @@ namespace TheBrain.Etls.Resources.Languages {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Thoughts count: {0}.
+        /// </summary>
+        internal static string ThoughtsCount {
+            get {
+                return ResourceManager.GetString("ThoughtsCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Upload content  from еxcel file to &apos;TheBrain&apos; application .
         /// </summary>
         internal static string UploadFilesFromExcelFile {

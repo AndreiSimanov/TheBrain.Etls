@@ -17,11 +17,13 @@ internal class SqliteContext : DbContext
         crmContextId++;
         Id = crmContextId;
         this.dbPath = dbPath;
+        ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseLazyLoadingProxies().UseSqlite($"Filename={dbPath}");
+        //optionsBuilder.LogTo(message => EtlLog.Information(message, false));
         base.OnConfiguring(optionsBuilder);
     }
 

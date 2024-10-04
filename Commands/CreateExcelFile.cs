@@ -35,12 +35,11 @@ internal class CreateExcelFile(IConfiguration config) : BaseBrainCommand(config)
         var rowIndex = 0;
         foreach (var thought in thoughts)
         {
-            if (string.IsNullOrWhiteSpace(thought.Value.ContentPath))
-                continue;
             ++rowIndex;
             worksheet.Cells[$"{Consts.ID_COL}{rowIndex}"].Value = thought.Value.Id;
             worksheet.Cells[$"{Consts.NAME_COL}{rowIndex}"].Value = thought.Value.Name;
-            worksheet.Cells[$"{Consts.CONTENT_COL}{rowIndex}"].Value = await File.ReadAllTextAsync(thought.Value.ContentPath);
+            if (!string.IsNullOrWhiteSpace(thought.Value.ContentPath))
+                worksheet.Cells[$"{Consts.CONTENT_COL}{rowIndex}"].Value = await File.ReadAllTextAsync(thought.Value.ContentPath);
             EtlLog.Processed(rowIndex, thoughts.Count);
         }
 
