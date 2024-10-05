@@ -17,7 +17,8 @@ internal class SqliteContext : DbContext
         crmContextId++;
         Id = crmContextId;
         this.dbPath = dbPath;
-        ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+        // QueryTrackingBehavior should be Tracking to update thought names
+        //ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking; 
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

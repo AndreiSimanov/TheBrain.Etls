@@ -9,8 +9,9 @@ namespace TheBrain.Etls.Commands.BaseCommands;
 internal abstract class BaseBrainCommand(IConfiguration config) : BaseCommand(config)
 {
     protected Dictionary<string, Thought> thoughts = new();
-    protected string brainsFolderPath = string.Empty;
-    protected string contentFileName = string.Empty;
+    protected string brainsFolderPath = config[Consts.BRAINS_FOLDER_PATH]!;
+    protected string contentFileName = config[Consts.CONTENT_FILE_NAME]!;
+    protected string dbFile = Path.Combine(config[Consts.BRAINS_FOLDER_PATH]!, config[Consts.DB_FILE_NAME]!);
 
     public override void GetUsage()
     {
@@ -47,10 +48,6 @@ internal abstract class BaseBrainCommand(IConfiguration config) : BaseCommand(co
 
     protected async override Task RunCommandAsync()
     {
-        brainsFolderPath = config[Consts.BRAINS_FOLDER_PATH]!;
-        contentFileName = config[Consts.CONTENT_FILE_NAME]!;
-        var dbFile = Path.Combine(brainsFolderPath!, config[Consts.DB_FILE_NAME]!);
-
         EtlLog.Information(string.Format(AppResources.LoadDataFromDb, Path.Combine(brainsFolderPath!, config[Consts.DB_FILE_NAME]!)));
         EtlLog.Information(string.Format(AppResources.FindFiles, config[Consts.CONTENT_FILE_NAME], brainsFolderPath));
 
