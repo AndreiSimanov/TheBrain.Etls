@@ -10,6 +10,8 @@ internal static class Consts
     //optional params
     public const string DB_FILE_NAME = "dbFileName";
     public const string CONTENT_FILE_NAME = "contentFileName";
+    public const string OLD_FORMAT_CONTENT_FOLDER_NAME = "oldFormatContentFolderName";
+    public const string OLD_FORMAT_CONTENT_FILE_NAME = "oldFormatContentFileName";
     public const string LOG_FILE_PATH = "logFilePath";
     public const string LANG = "lang";
 
@@ -21,6 +23,8 @@ internal static class Consts
     public const string DEFAULT_DB_FILE_NAME = "Brain.db";
     public const string DEFAULT_LOG_FILE_NAME = "TheBrain.Etls.log";
     public const string DEFAULT_CONTENT_FILE_NAME = "Notes.md";
+    public const string DEFAULT_OLD_FORMAT_CONTENT_FOLDER_NAME = "Notes";
+    public const string DEFAULT_OLD_FORMAT_CONTENT_FILE_NAME = "notes.html";
     public const string DEFAULT_LANG = "ru";
 
     // other

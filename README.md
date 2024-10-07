@@ -20,7 +20,9 @@
 Необязательные параметры:<br><br>
 <ul>
   dbFileName=<Имя файла базы данных приложения TheBrain> (По умолчанию = Brain.db)<br>
-  contentFileName=<Имя файла контента приложения TheBrain> (По умолчанию  = Notes.md)<br>
+  contentFileName=<Имя файла контента приложения TheBrain> (По умолчанию = Notes.md)<br>
+  oldFormatContentFileName=<Имя файла контента для старого формата приложения TheBrain> (По умолчанию = notes.html)<br>
+  oldFormatContentFolderName=<Имя папки контента для старого формата приложения TheBrain> (По умолчанию = notes)<br>
   logFilePath=<Путь к файлу логирования> (Default = TheBrain.Etls.log)<br>
   lang=<Установить язык приложения ru/en> (Default = ru)<br>
 </ul>      
@@ -42,7 +44,9 @@ TheBrain.Etls.exe command=CreateExcelFile excelFilePath=C:\temp\test.xlsx brains
 Необязательные параметры:<br><br>
 <ul>
   dbFileName=<Имя файла базы данных приложения TheBrain> (По умолчанию = Brain.db)<br>
-  contentFileName=<Имя файла контента приложения TheBrain> (По умолчанию  = Notes.md)<br>
+  contentFileName=<Имя файла контента приложения TheBrain> (По умолчанию = Notes.md)<br>
+  oldFormatContentFileName=<Имя файла контента для старого формата приложения TheBrain> (По умолчанию = notes.html)<br>
+  oldFormatContentFolderName=<Имя папки контента для старого формата приложения TheBrain> (По умолчанию = notes)<br>
   logFilePath=<Путь к файлу логирования> (Default = TheBrain.Etls.log)<br>
   lang=<Установить язык приложения ru/en> (Default = ru)<br>
 </ul>      

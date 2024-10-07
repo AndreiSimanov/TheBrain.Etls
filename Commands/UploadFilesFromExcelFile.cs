@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using OfficeOpenXml;
 using TheBrain.Etls.Commands.BaseCommands;
 using TheBrain.Etls.DBContext;
@@ -17,6 +18,7 @@ internal class UploadFilesFromExcelFile(IConfiguration config) : BaseBrainComman
     {
         await base.RunCommandAsync();
         await UploadDataAsync();
+        EtlLog.Warning(AppResources.RebuildBrainIndexWarning, true);
     }
 
     protected override void ValidateParams()
@@ -57,7 +59,7 @@ internal class UploadFilesFromExcelFile(IConfiguration config) : BaseBrainComman
         {
             var thoughtId = worksheet.Cells[$"{Consts.ID_COL}{rowIndex}"].Value?.ToString();
             var thoughtName = worksheet.Cells[$"{Consts.NAME_COL }{rowIndex}"].Value?.ToString();
-            var contentPath = GetFilePath(thoughtId!);
+            var contentPath = GetContentPath(thoughtId!);
             var content = worksheet.Cells[$"{Consts.CONTENT_COL}{rowIndex}"].Value?.ToString();
             if (ValidateRow(rowIndex, thoughtId))
             {

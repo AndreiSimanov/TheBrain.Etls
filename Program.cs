@@ -52,6 +52,12 @@ void InitConfig(IConfiguration config)
     if (string.IsNullOrWhiteSpace(config[Consts.CONTENT_FILE_NAME]))
         config[Consts.CONTENT_FILE_NAME] = Consts.DEFAULT_CONTENT_FILE_NAME;
 
+    if (string.IsNullOrWhiteSpace(config[Consts.OLD_FORMAT_CONTENT_FILE_NAME]))
+        config[Consts.OLD_FORMAT_CONTENT_FILE_NAME] = Consts.DEFAULT_OLD_FORMAT_CONTENT_FILE_NAME;
+
+    if (string.IsNullOrWhiteSpace(config[Consts.OLD_FORMAT_CONTENT_FOLDER_NAME]))
+        config[Consts.OLD_FORMAT_CONTENT_FOLDER_NAME] = Consts.DEFAULT_OLD_FORMAT_CONTENT_FOLDER_NAME;
+
     if (string.IsNullOrWhiteSpace(config[Consts.LOG_FILE_PATH]))
         config[Consts.LOG_FILE_PATH] = Consts.DEFAULT_LOG_FILE_NAME;
 

@@ -189,6 +189,12 @@
   <data name="LogFileParamUsage" xml:space="preserve">
     <value>{0}{1}=&lt;Log file path&gt; (Default = {2})</value>
   </data>
+  <data name="OldFormatContentFileNameParamUsage" xml:space="preserve">
+    <value>{0}{1}=&lt;TheBrain old format content file name&gt; (Default = {2})</value>
+  </data>
+  <data name="OldFormatContentFolderNameParamUsage" xml:space="preserve">
+    <value>{0}{1}=&lt;TheBrain old format content folder name&gt; (Default = {2})</value>
+  </data>
   <data name="ParameterNotSpecified" xml:space="preserve">
     <value>Parameter '{0}' not specified</value>
   </data>
@@ -197,6 +203,9 @@
   </data>
   <data name="Processed" xml:space="preserve">
     <value>Processed: {0} of {1}</value>
+  </data>
+  <data name="RebuildBrainIndexWarning" xml:space="preserve">
+    <value>Please run the "Restore Brain Index" command after updating the content</value>
   </data>
   <data name="RowFileNotFound" xml:space="preserve">
     <value>Row {0}: file '{1}' doesn't exist</value>

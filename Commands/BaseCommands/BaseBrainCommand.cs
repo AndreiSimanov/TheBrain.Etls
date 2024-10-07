@@ -11,6 +11,8 @@ internal abstract class BaseBrainCommand(IConfiguration config) : BaseCommand(co
     protected Dictionary<string, Thought> thoughts = new();
     protected string brainsFolderPath = config[Consts.BRAINS_FOLDER_PATH]!;
     protected string contentFileName = config[Consts.CONTENT_FILE_NAME]!;
+    protected string oldFormatContentFileName = config[Consts.OLD_FORMAT_CONTENT_FILE_NAME]!;
+    protected string oldFormatContentFolderName = config[Consts.OLD_FORMAT_CONTENT_FOLDER_NAME]!;
     protected string dbFile = Path.Combine(config[Consts.BRAINS_FOLDER_PATH]!, config[Consts.DB_FILE_NAME]!);
 
     public override void GetUsage()
@@ -24,6 +26,8 @@ internal abstract class BaseBrainCommand(IConfiguration config) : BaseCommand(co
         sb.AppendLine(AppResources.CommandOptionalParams);
         sb.AppendLine(string.Format(AppResources.DatabaseFileParamUsage, Consts.PARAM_USAGE_INDENT, Consts.DB_FILE_NAME, Consts.DEFAULT_DB_FILE_NAME));
         sb.AppendLine(string.Format(AppResources.ContentFileParamUsage, Consts.PARAM_USAGE_INDENT, Consts.CONTENT_FILE_NAME, Consts.DEFAULT_CONTENT_FILE_NAME));
+        sb.AppendLine(string.Format(AppResources.OldFormatContentFileNameParamUsage, Consts.PARAM_USAGE_INDENT, Consts.OLD_FORMAT_CONTENT_FILE_NAME, Consts.DEFAULT_OLD_FORMAT_CONTENT_FILE_NAME));
+        sb.AppendLine(string.Format(AppResources.OldFormatContentFolderNameParamUsage, Consts.PARAM_USAGE_INDENT, Consts.OLD_FORMAT_CONTENT_FOLDER_NAME, Consts.DEFAULT_OLD_FORMAT_CONTENT_FOLDER_NAME));
         sb.AppendLine(string.Format(AppResources.LogFileParamUsage, Consts.PARAM_USAGE_INDENT, Consts.LOG_FILE_PATH, Consts.DEFAULT_LOG_FILE_NAME));
         sb.AppendLine(string.Format(AppResources.LangParamUsage, Consts.PARAM_USAGE_INDENT, Consts.LANG, Consts.DEFAULT_LANG));
         sb.AppendLine(string.Empty);
@@ -50,6 +54,7 @@ internal abstract class BaseBrainCommand(IConfiguration config) : BaseCommand(co
     {
         EtlLog.Information(string.Format(AppResources.LoadDataFromDb, Path.Combine(brainsFolderPath!, config[Consts.DB_FILE_NAME]!)));
         EtlLog.Information(string.Format(AppResources.FindFiles, config[Consts.CONTENT_FILE_NAME], brainsFolderPath));
+        EtlLog.Information(string.Format(AppResources.FindFiles, config[Consts.OLD_FORMAT_CONTENT_FILE_NAME], brainsFolderPath));
 
         using var dbContext = new SqliteContext(dbFile);
 
@@ -59,8 +64,8 @@ internal abstract class BaseBrainCommand(IConfiguration config) : BaseCommand(co
 
         await foreach (var thought in dbContext.Thoughts.AsAsyncEnumerable())
         {
-            var contentPath = GetFilePath(thought.Id);
-            if (File.Exists(contentPath))
+            var contentPath = GetContentPath(thought.Id);
+            if (!string.IsNullOrWhiteSpace(contentPath))
             {
                 thought.ContentPath = contentPath;
                 filesCount++;
@@ -105,7 +110,18 @@ internal abstract class BaseBrainCommand(IConfiguration config) : BaseCommand(co
         }
     }
 
-    protected string GetFilePath(string id) => Path.Combine(brainsFolderPath, id, contentFileName);
+    protected string GetContentPath(string id)
+    {
+        var contentPath = Path.Combine(brainsFolderPath, id, contentFileName);
+        if (File.Exists(contentPath))
+            return contentPath;
+
+        contentPath = Path.Combine(brainsFolderPath, id, oldFormatContentFolderName, oldFormatContentFileName);
+        if (File.Exists(contentPath))
+            return contentPath;
+
+        return string.Empty;
+    }
 
     bool IsFileLocked(string filePath)
     {

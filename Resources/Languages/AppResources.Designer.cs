@@ -277,6 +277,24 @@ namespace TheBrain.Etls.Resources.Languages {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0}{1}=&lt;TheBrain old format content file name&gt; (Default = {2}).
+        /// </summary>
+        internal static string OldFormatContentFileNameParamUsage {
+            get {
+                return ResourceManager.GetString("OldFormatContentFileNameParamUsage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}{1}=&lt;TheBrain old format content folder name&gt; (Default = {2}).
+        /// </summary>
+        internal static string OldFormatContentFolderNameParamUsage {
+            get {
+                return ResourceManager.GetString("OldFormatContentFolderNameParamUsage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Parameter &apos;{0}&apos; not specified.
         /// </summary>
         internal static string ParameterNotSpecified {
@@ -300,6 +318,15 @@ namespace TheBrain.Etls.Resources.Languages {
         internal static string Processed {
             get {
                 return ResourceManager.GetString("Processed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please run the &quot;Restore Brain Index&quot; command after updating the content.
+        /// </summary>
+        internal static string RebuildBrainIndexWarning {
+            get {
+                return ResourceManager.GetString("RebuildBrainIndexWarning", resourceCulture);
             }
         }
         
