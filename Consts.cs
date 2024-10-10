@@ -20,6 +20,7 @@ internal static class Consts
     public const string UPLOAD_FILES_COMMAND_PARAM = "uploadFilesFromExcelFile";
 
     // default values
+    public const string DEFAULT_BRAINS_FOLDER_PATH = ".";
     public const string DEFAULT_DB_FILE_NAME = "Brain.db";
     public const string DEFAULT_LOG_FILE_NAME = "TheBrain.Etls.log";
     public const string DEFAULT_CONTENT_FILE_NAME = "Notes.md";

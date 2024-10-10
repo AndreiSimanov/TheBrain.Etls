@@ -46,6 +46,9 @@ Console.ReadKey();
 
 void InitConfig(IConfiguration config)
 {
+    if (string.IsNullOrWhiteSpace(config[Consts.BRAINS_FOLDER_PATH]))
+        config[Consts.BRAINS_FOLDER_PATH] = Consts.DEFAULT_BRAINS_FOLDER_PATH;
+
     if (string.IsNullOrWhiteSpace(config[Consts.DB_FILE_NAME]))
         config[Consts.DB_FILE_NAME] = Consts.DEFAULT_DB_FILE_NAME;
 
