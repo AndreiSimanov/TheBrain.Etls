@@ -88,6 +88,15 @@ namespace TheBrain.Etls.Resources.Languages {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Command params:.
+        /// </summary>
+        internal static string CommandParams {
+            get {
+                return ResourceManager.GetString("CommandParams", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0}{1}={2} (Run the specified command).
         /// </summary>
         internal static string CommandParamUsage {
@@ -111,6 +120,15 @@ namespace TheBrain.Etls.Resources.Languages {
         internal static string CommandSample2 {
             get {
                 return ResourceManager.GetString("CommandSample2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}.exe {1}={2} {3}=C:\temp\test.xlsx {4}=C:\Users\user\Brains\U01\B04 {5}=true.
+        /// </summary>
+        internal static string CommandSample3 {
+            get {
+                return ResourceManager.GetString("CommandSample3", resourceCulture);
             }
         }
         
@@ -322,7 +340,7 @@ namespace TheBrain.Etls.Resources.Languages {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please run the &quot;Restore Brain Index&quot; command after updating the content.
+        ///   Looks up a localized string similar to Please run the «File-&gt;Utilities-&gt;Restore Brain Index» command after updating the content.
         /// </summary>
         internal static string RebuildBrainIndexWarning {
             get {
@@ -385,11 +403,29 @@ namespace TheBrain.Etls.Resources.Languages {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please run the «Online-&gt;Sync Brain» command after updating the content.
+        /// </summary>
+        internal static string SyncBrainWarning {
+            get {
+                return ResourceManager.GetString("SyncBrainWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Thoughts count: {0}.
         /// </summary>
         internal static string ThoughtsCount {
             get {
                 return ResourceManager.GetString("ThoughtsCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}{1}=&lt;Update all thoughts true/false&gt; (Default = {2}).
+        /// </summary>
+        internal static string UpdateAllThoughtsParamUsage {
+            get {
+                return ResourceManager.GetString("UpdateAllThoughtsParamUsage", resourceCulture);
             }
         }
         

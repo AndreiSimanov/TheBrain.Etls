@@ -5,7 +5,7 @@ using TheBrain.Etls.Resources.Languages;
 
 namespace TheBrain.Etls.Commands;
 
-internal class CreateExcelFile(IConfiguration config) : BaseBrainCommand(config)
+class CreateExcelFile(IConfiguration config) : BaseBrainCommand(config)
 {
     public override string GetCommandName()
     {

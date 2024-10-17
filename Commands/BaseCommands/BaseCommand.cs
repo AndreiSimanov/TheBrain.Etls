@@ -3,7 +3,7 @@ using TheBrain.Etls.Resources.Languages;
 
 namespace TheBrain.Etls.Commands.BaseCommands;
 
-internal abstract class BaseCommand(IConfiguration config)
+abstract class BaseCommand(IConfiguration config)
 {
     protected readonly IConfiguration config = config;
     protected readonly List<string> errors = new List<string>();
@@ -40,8 +40,13 @@ internal abstract class BaseCommand(IConfiguration config)
         return false;
     }
 
+    protected virtual void ValidateParams()
+    {
+        EtlLog.Information(AppResources.CommandParams, false);
+        foreach (var param in config.AsEnumerable())
+            EtlLog.Information($"{param.Key} = {param.Value}", false);
+    }
+
     protected abstract Task RunCommandAsync();
-    protected abstract void ValidateParams();
-    public abstract void GetUsage();
     public abstract string GetCommandName();
 }

@@ -7,7 +7,7 @@ using TheBrain.Etls.Resources.Languages;
 
 namespace TheBrain.Etls.Commands;
 
-internal class UploadFilesFromExcelFile(IConfiguration config) : BaseBrainCommand(config)
+class UploadFilesFromExcelFile(IConfiguration config) : BaseBrainCommand(config)
 {
     public override string GetCommandName()
     {
@@ -19,6 +19,7 @@ internal class UploadFilesFromExcelFile(IConfiguration config) : BaseBrainComman
         await base.RunCommandAsync();
         await UploadDataAsync();
         EtlLog.Warning(AppResources.RebuildBrainIndexWarning, true);
+        EtlLog.Warning(AppResources.SyncBrainWarning, true);
     }
 
     protected override void ValidateParams()
@@ -55,6 +56,10 @@ internal class UploadFilesFromExcelFile(IConfiguration config) : BaseBrainComman
     {
         using var dbContext = new SqliteContext(dbFile);
 
+        var syncPoint = await dbContext.SyncPoints.OrderByDescending(item => item.CreationDateTime).FirstOrDefaultAsync();
+        var syncPointDateTime = syncPoint != null ? syncPoint.CreationDateTime : DateTime.Now;
+        var updateAllThoughts = config[Consts.UPDATE_ALL_THOUGHTS]!.ToLower() == "true";
+
         for (int rowIndex = 1; rowIndex <= rowCount; rowIndex++)
         {
             var thoughtId = worksheet.Cells[$"{Consts.ID_COL}{rowIndex}"].Value?.ToString();
@@ -64,8 +69,8 @@ internal class UploadFilesFromExcelFile(IConfiguration config) : BaseBrainComman
             if (ValidateRow(rowIndex, thoughtId))
             {
                 thoughtName = thoughtName ?? string.Empty;
-                if (!string.Equals(thoughts[thoughtId!].Name, thoughtName))
-                    await UpdateThoughtName(dbContext, thoughtId!, thoughtName);
+                if (updateAllThoughts || !string.Equals(thoughts[thoughtId!].Name, thoughtName))
+                    await UpdateThoughtName(dbContext, thoughtId!, thoughtName, syncPointDateTime);
 
                 if (ValidateContentFile(rowIndex, contentPath, content))
                     await UpdateThoughtContent(contentPath, content);
@@ -75,11 +80,17 @@ internal class UploadFilesFromExcelFile(IConfiguration config) : BaseBrainComman
         dbContext.SaveChanges();
     }
 
-    async Task UpdateThoughtName(SqliteContext dbContext, string thoughtId, string thoughtName)
+    async Task UpdateThoughtName(SqliteContext dbContext, string thoughtId, string thoughtName, DateTime syncPointDateTime)
     {
         var thought =  await dbContext.Thoughts.FindAsync(thoughtId);
         if (thought != null)
+        {
             thought.Name = thoughtName;
+            thought.ModificationDateTime = syncPointDateTime;
+            thought.SyncUpdateDateTime = null;
+            thought.SyncUpdateId = null;
+            thought.SyncSentId = null;
+        }
     }
 
     async Task UpdateThoughtContent(string contentPath, string? content)

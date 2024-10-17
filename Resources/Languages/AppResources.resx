@@ -126,6 +126,9 @@
   <data name="CommandOptionalParams" xml:space="preserve">
     <value>Optional params:</value>
   </data>
+  <data name="CommandParams" xml:space="preserve">
+    <value>Command params:</value>
+  </data>
   <data name="CommandParamUsage" xml:space="preserve">
     <value>{0}{1}={2} (Run the specified command)</value>
   </data>
@@ -134,6 +137,9 @@
   </data>
   <data name="CommandSample2" xml:space="preserve">
     <value>{0}.exe {1}={2} {3}=C:\temp\test.xlsx {4}=C:\Users\user\Brains\U01\B04 {5}=en</value>
+  </data>
+  <data name="CommandSample3" xml:space="preserve">
+    <value>{0}.exe {1}={2} {3}=C:\temp\test.xlsx {4}=C:\Users\user\Brains\U01\B04 {5}=true</value>
   </data>
   <data name="CommandUsage" xml:space="preserve">
     <value>Usage:</value>
@@ -205,7 +211,7 @@
     <value>Processed: {0} of {1}</value>
   </data>
   <data name="RebuildBrainIndexWarning" xml:space="preserve">
-    <value>Please run the "Restore Brain Index" command after updating the content</value>
+    <value>Please run the «File-&gt;Utilities-&gt;Restore Brain Index» command after updating the content</value>
   </data>
   <data name="RowFileNotFound" xml:space="preserve">
     <value>Row {0}: file '{1}' doesn't exist</value>
@@ -225,8 +231,14 @@
   <data name="SeeLogFilePath" xml:space="preserve">
     <value>See log file: '{0}'</value>
   </data>
+  <data name="SyncBrainWarning" xml:space="preserve">
+    <value>Please run the «Online-&gt;Sync Brain» command after updating the content</value>
+  </data>
   <data name="ThoughtsCount" xml:space="preserve">
     <value>Thoughts count: {0}</value>
+  </data>
+  <data name="UpdateAllThoughtsParamUsage" xml:space="preserve">
+    <value>{0}{1}=&lt;Update all thoughts true/false&gt; (Default = {2})</value>
   </data>
   <data name="UploadFilesFromExcelFile" xml:space="preserve">
     <value>Upload content  from еxcel file to 'TheBrain' application </value>

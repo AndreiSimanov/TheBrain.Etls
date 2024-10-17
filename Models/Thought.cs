@@ -1,11 +1,15 @@
-﻿namespace TheBrain.Etls.Models
+﻿namespace TheBrain.Etls.Models;
+
+public class Thought
 {
-    public class Thought
-    {
-        public string Id { get; set; } = string.Empty;
-        public string Name { get; set; } = string.Empty;
-        public string ContentPath { get; set; } = string.Empty;
-    }
+    public string Id { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
+    public string ContentPath { get; set; } = string.Empty;
+    public DateTime ModificationDateTime { get; set; }
+    public DateTime? SyncUpdateDateTime { get; set; }
+    public string? SyncSentId { get; set; } = null;
+    public string? SyncUpdateId { get; set; } = null;
+
 }
 
 /*
@@ -29,4 +33,4 @@ CREATE TABLE "Thoughts"(
 "SyncUpdateDateTime" bigint ,
 "ThoughtIconInfo" varchar(140) ,
 "TypeId" varchar(36) )
-  */
+*/

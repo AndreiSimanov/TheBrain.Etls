@@ -3,6 +3,7 @@ using System.Globalization;
 using TheBrain.Etls;
 using TheBrain.Etls.Commands;
 using TheBrain.Etls.Commands.BaseCommands;
+using TheBrain.Etls.CommandUsages;
 using TheBrain.Etls.Resources.Languages;
 
 AppDomain.CurrentDomain.UnhandledException += UnhandledException;
@@ -21,6 +22,10 @@ var commands = new List<BaseCommand> {
     new CreateExcelFile(config),
     new UploadFilesFromExcelFile(config)};
 
+var commandUsages = new List<BaseCommandUsage> {
+    new CreateExcelFileUsage(),
+    new UploadFilesFromExcelFileUsage()};
+
 try
 {
     foreach (var command in commands)
@@ -32,7 +37,7 @@ try
         }
     }
 
-    commands.ForEach(command => command.GetUsage());
+    commandUsages.ForEach(commandUsage => EtlLog.ConsoleWriteLine(commandUsage.GetUsage()));
 }
 catch (Exception ex)
 {
@@ -66,6 +71,9 @@ void InitConfig(IConfiguration config)
 
     if (string.IsNullOrWhiteSpace(config[Consts.LANG]))
         config[Consts.LANG] = Consts.DEFAULT_LANG;
+
+    if (string.IsNullOrWhiteSpace(config[Consts.UPDATE_ALL_THOUGHTS]))
+        config[Consts.UPDATE_ALL_THOUGHTS] = Consts.DEFAULT_UPDATE_ALL_THOUGHTS;
 }
 
 void UnhandledException(object sender, UnhandledExceptionEventArgs e) => EtlLog.Error(e.ExceptionObject.ToString()!);

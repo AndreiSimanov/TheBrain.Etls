@@ -14,6 +14,7 @@ internal static class Consts
     public const string OLD_FORMAT_CONTENT_FILE_NAME = "oldFormatContentFileName";
     public const string LOG_FILE_PATH = "logFilePath";
     public const string LANG = "lang";
+    public const string UPDATE_ALL_THOUGHTS = "updateAllThoughts";
 
     // commands
     public const string CREATE_EXCEL_COMMAND_PARAM = "createExcelFile";
@@ -27,6 +28,7 @@ internal static class Consts
     public const string DEFAULT_OLD_FORMAT_CONTENT_FOLDER_NAME = "Notes";
     public const string DEFAULT_OLD_FORMAT_CONTENT_FILE_NAME = "notes.html";
     public const string DEFAULT_LANG = "ru";
+    public const string DEFAULT_UPDATE_ALL_THOUGHTS = "false";
 
     // other
     public const string SHEET_NAME = "TheBrain";

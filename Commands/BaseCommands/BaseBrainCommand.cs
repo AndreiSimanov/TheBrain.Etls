@@ -1,12 +1,11 @@
 ﻿using Microsoft.Extensions.Configuration;
-using System.Text;
 using TheBrain.Etls.DBContext;
 using TheBrain.Etls.Models;
 using TheBrain.Etls.Resources.Languages;
 
 namespace TheBrain.Etls.Commands.BaseCommands;
 
-internal abstract class BaseBrainCommand(IConfiguration config) : BaseCommand(config)
+abstract class BaseBrainCommand(IConfiguration config) : BaseCommand(config)
 {
     protected Dictionary<string, Thought> thoughts = new();
     protected string brainsFolderPath = config[Consts.BRAINS_FOLDER_PATH]!;
@@ -14,41 +13,6 @@ internal abstract class BaseBrainCommand(IConfiguration config) : BaseCommand(co
     protected string oldFormatContentFileName = config[Consts.OLD_FORMAT_CONTENT_FILE_NAME]!;
     protected string oldFormatContentFolderName = config[Consts.OLD_FORMAT_CONTENT_FOLDER_NAME]!;
     protected string dbFile = Path.Combine(config[Consts.BRAINS_FOLDER_PATH]!, config[Consts.DB_FILE_NAME]!);
-
-    public override void GetUsage()
-    {
-        var sb = new StringBuilder();
-        sb.AppendLine(GetCommandName());
-        sb.AppendLine(AppResources.CommandUsage);
-        sb.AppendLine(string.Format(AppResources.CommandParamUsage, Consts.PARAM_USAGE_INDENT, Consts.COMMAND, GetType().Name));
-        sb.AppendLine(string.Format(AppResources.ExcelParamUsage, Consts.PARAM_USAGE_INDENT, Consts.EXCEL_FILE_PATH));
-        sb.AppendLine(string.Format(AppResources.DatabaseParamUsage, Consts.PARAM_USAGE_INDENT, Consts.BRAINS_FOLDER_PATH));
-        sb.AppendLine(AppResources.CommandOptionalParams);
-        sb.AppendLine(string.Format(AppResources.DatabaseFileParamUsage, Consts.PARAM_USAGE_INDENT, Consts.DB_FILE_NAME, Consts.DEFAULT_DB_FILE_NAME));
-        sb.AppendLine(string.Format(AppResources.ContentFileParamUsage, Consts.PARAM_USAGE_INDENT, Consts.CONTENT_FILE_NAME, Consts.DEFAULT_CONTENT_FILE_NAME));
-        sb.AppendLine(string.Format(AppResources.OldFormatContentFileNameParamUsage, Consts.PARAM_USAGE_INDENT, Consts.OLD_FORMAT_CONTENT_FILE_NAME, Consts.DEFAULT_OLD_FORMAT_CONTENT_FILE_NAME));
-        sb.AppendLine(string.Format(AppResources.OldFormatContentFolderNameParamUsage, Consts.PARAM_USAGE_INDENT, Consts.OLD_FORMAT_CONTENT_FOLDER_NAME, Consts.DEFAULT_OLD_FORMAT_CONTENT_FOLDER_NAME));
-        sb.AppendLine(string.Format(AppResources.LogFileParamUsage, Consts.PARAM_USAGE_INDENT, Consts.LOG_FILE_PATH, Consts.DEFAULT_LOG_FILE_NAME));
-        sb.AppendLine(string.Format(AppResources.LangParamUsage, Consts.PARAM_USAGE_INDENT, Consts.LANG, Consts.DEFAULT_LANG));
-        sb.AppendLine(string.Empty);
-        sb.AppendLine(AppResources.CommandExamples);
-        sb.AppendLine(string.Format(AppResources.CommandSample1,
-            AppDomain.CurrentDomain.FriendlyName,
-            Consts.COMMAND,
-            GetType().Name,
-            Consts.EXCEL_FILE_PATH,
-            Consts.BRAINS_FOLDER_PATH));
-        sb.AppendLine(string.Empty);
-        sb.AppendLine(string.Format(AppResources.CommandSample2,
-            AppDomain.CurrentDomain.FriendlyName,
-            Consts.COMMAND,
-            GetType().Name,
-            Consts.EXCEL_FILE_PATH,
-            Consts.BRAINS_FOLDER_PATH,
-            Consts.LANG));
-        sb.AppendLine(string.Empty);
-        EtlLog.ConsoleWriteLine(sb.ToString());
-    }
 
     protected async override Task RunCommandAsync()
     {
@@ -78,6 +42,7 @@ internal abstract class BaseBrainCommand(IConfiguration config) : BaseCommand(co
 
     protected override void ValidateParams()
     {
+        base.ValidateParams();
         var brainsFolderPath = config[Consts.BRAINS_FOLDER_PATH];
         var excelFilePath = config[Consts.EXCEL_FILE_PATH];
 
